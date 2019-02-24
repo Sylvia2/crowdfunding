@@ -1,0 +1,56 @@
+pragma solidity ^0.4.25;
+contract Fund {
+
+  address public organizer;
+  mapping (address => uint) public paidAmount;
+  mapping(address => uint) public ownerAmount;
+  mapping(address => uint) public successAmount;
+  uint public num;
+  uint public totalNum;
+  uint public total;
+
+  event DepositLog(address _from, uint _amount);  // so you can log these events
+  event RefundLog(address _to, uint _amount);
+
+  constructor() public { // Constructor
+    organizer=msg.sender;
+    num = 0;
+    total=0;
+  }
+
+  function fund(uint _amount,address _to,address _from) public payable returns (bool success) {
+
+    if(ownerAmount[_to]>=successAmount[_to]){
+        return false;
+    }
+    paidAmount[_from] += _amount;
+    total +=_amount;
+    ownerAmount[_to] +=_amount;
+    totalNum++;
+    emit DepositLog(_from,_amount);
+    return true;
+  }
+
+  function setSuccessAmount(uint amount,address _to) public payable returns(bool success) {
+    if(msg.sender!=organizer){
+        return false;
+    }
+    successAmount[_to]=amount;
+    return true;
+  }
+
+//   function getPaidAmount(address _from) view public returns(uint amount){
+//       return paidAmount[_from];
+//   }
+
+//   function getSuccessAmount(address _from) view public returns(uint amount){
+//       return successAmount[_from];
+//   }
+
+//   function getOwnerAmount(address _from) view public returns(uint amount){
+//       return ownerAmount[_from];
+//   }
+
+
+
+}
