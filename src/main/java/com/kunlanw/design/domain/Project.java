@@ -16,8 +16,8 @@ public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int projectID;
-    private String projectName;
-    private BigDecimal projectAmount;
+    private String projectname;
+    private BigDecimal projectamount;
     private int walletID;
     private int userID;
     private String desc;

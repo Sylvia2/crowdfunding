@@ -5,10 +5,14 @@ import com.kunlanw.design.dao.UserDao;
 import com.kunlanw.design.domain.Project;
 import com.kunlanw.design.model.ProjectEntity;
 import com.kunlanw.design.service.IProjectService;
+import com.kunlanw.design.until.Constant;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -44,71 +48,82 @@ public class ProjectServiceImpl implements IProjectService {
 
     /**
      * 根据项目id获取详情
+     *
      * @param id
      * @return
      */
     @Override
     public ProjectEntity getByID(int id) {
-        try{
-            Project project=this.projectDao.getOne(id);
-            ProjectEntity res=this.domain2dto(project);
+        try {
+            Project project = this.projectDao.findById(id).get();
+            ProjectEntity res = this.domain2dto(project);
             return res;
-        }catch (Exception e){
+        } catch (Exception e) {
 
             return null;
         }
     }
 
     /**
-     * 获取众筹项目的状态
-     * @param status
+     * 创建众筹项目
+     *
+     * @param entity
      * @return
      */
-    private String getStatus(short status) {
-        switch (status) {
-            case 1:
-                return "成功";
-            case 2:
-                return "失败";
-            case 3:
-                return "待审批";
-            case 4:
-                return "进行中";
-            default:
-                return "";
+    @Override
+    public ProjectEntity createProject(ProjectEntity entity) {
+        try {
+            Project project=this.dto2domain(entity);
+            Project res=this.projectDao.save(project);
+            return this.domain2dto(res);
+        } catch (Exception e) {
+            return null;
         }
     }
+
+
+
 
     /**
-     * 获取众筹项目类型
-     * @param type
+     * @param item
      * @return
      */
-    private String getType(int type){
-        switch (type){
-            case 1:
-                return "捐款";
-            case 2:
-                return "创业项目";
-            default:
-                return "";
-        }
-    }
-
-    private ProjectEntity domain2dto(Project item){
-        if(item!=null){
-            ProjectEntity entity=new ProjectEntity();
+    private ProjectEntity domain2dto(Project item) {
+        if (item != null) {
+            ProjectEntity entity = new ProjectEntity();
             entity.setProjectID(item.getProjectID());
             entity.setUserID(item.getUserID());
             entity.setWalletID(item.getWalletID());
             entity.setDeadline(item.getDeadline());
-            entity.setProjectAmount(item.getProjectAmount());
-            entity.setProjectName(item.getProjectName());
+            entity.setProjectAmount(item.getProjectamount());
+            entity.setProjectName(item.getProjectname());
             entity.setDesc(item.getDesc());
-            entity.setStatus(this.getStatus(item.getStatus()));
-            entity.setType(this.getType(item.getType()));
+            entity.setStatus(item.getStatus());
+            entity.setType(item.getType());
             return entity;
         }
         return null;
+    }
+
+    /**
+     * @param entity
+     * @return
+     */
+    private Project dto2domain(ProjectEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        Project res = new Project();
+        res.setStatus(entity.getStatus());
+        res.setUserID(entity.getUserID());
+        res.setWalletID(entity.getWalletID());
+        res.setDeadline(entity.getDeadline());
+        res.setDesc(entity.getDesc());
+        res.setProjectname(entity.getProjectName());
+        res.setProjectamount(entity.getProjectAmount());
+        res.setType(entity.getType());
+        res.setDatachange_createtime(new Date());
+        res.setDatachange_lasttime(new Date());
+        return res;
     }
 }

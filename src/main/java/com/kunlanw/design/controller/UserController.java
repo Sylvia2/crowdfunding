@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import com.kunlanw.design.dao.UserDao;
 import com.kunlanw.design.domain.User;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

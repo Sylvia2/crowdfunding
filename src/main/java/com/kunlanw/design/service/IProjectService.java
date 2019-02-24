@@ -9,4 +9,6 @@ public interface IProjectService {
     List<ProjectEntity> getAllProject();
 
     ProjectEntity getByID(int id);
+
+    ProjectEntity createProject(ProjectEntity entity);
 }

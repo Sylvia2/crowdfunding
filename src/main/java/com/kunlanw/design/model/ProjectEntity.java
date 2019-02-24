@@ -14,8 +14,8 @@ public class ProjectEntity {
     private int userID;
     private String desc;
     private Date deadline;
-    private String type;
-    private String status;
+    private int type;
+    private short status;
     private Date datachange_createtime;
     private Date datachange_lasttime;
 }
