@@ -1,0 +1,209 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" -->
+        <!--"http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+<mapper namespace="com.kunlanw.design.dao.LogMapper">
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.Log">
+    <id column="logID" jdbcType="INTEGER" property="logid" />
+    <result column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="projectID" jdbcType="INTEGER" property="projectid" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    logID, userID, projectID, datachange_createtime, datachange_lasttime, amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from log
+    where logID = #{logid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from log
+    where logID = #{logid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.Log">
+    insert into log (logID, userID, projectID, 
+      datachange_createtime, datachange_lasttime, 
+      amount)
+    values (#{logid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{projectid,jdbcType=INTEGER}, 
+      #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datachangeLasttime,jdbcType=TIMESTAMP}, 
+      #{amount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.Log">
+    insert into log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logid != null">
+        logID,
+      </if>
+      <if test="userid != null">
+        userID,
+      </if>
+      <if test="projectid != null">
+        projectID,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logid != null">
+        #{logid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null">
+        #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.Log">
+    update log
+    <set>
+      <if test="userid != null">
+        userID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null">
+        projectID = #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where logID = #{logid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.Log">
+    update log
+    set userID = #{userid,jdbcType=INTEGER},
+      projectID = #{projectid,jdbcType=INTEGER},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
+      amount = #{amount,jdbcType=DECIMAL}
+    where logID = #{logid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.Log">
+    <id column="logID" jdbcType="INTEGER" property="logid" />
+    <result column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="projectID" jdbcType="INTEGER" property="projectid" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    logID, userID, projectID, datachange_createtime, datachange_lasttime, amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from log
+    where logID = #{logid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from log
+    where logID = #{logid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.Log">
+    insert into log (logID, userID, projectID, 
+      datachange_createtime, datachange_lasttime, 
+      amount)
+    values (#{logid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{projectid,jdbcType=INTEGER}, 
+      #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datachangeLasttime,jdbcType=TIMESTAMP}, 
+      #{amount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.Log">
+    insert into log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logid != null">
+        logID,
+      </if>
+      <if test="userid != null">
+        userID,
+      </if>
+      <if test="projectid != null">
+        projectID,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logid != null">
+        #{logid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null">
+        #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.Log">
+    update log
+    <set>
+      <if test="userid != null">
+        userID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null">
+        projectID = #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where logID = #{logid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.Log">
+    update log
+    set userID = #{userid,jdbcType=INTEGER},
+      projectID = #{projectid,jdbcType=INTEGER},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
+      amount = #{amount,jdbcType=DECIMAL}
+    where logID = #{logid,jdbcType=INTEGER}
+  </update>
+</mapper>

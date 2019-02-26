@@ -1,25 +1,71 @@
 package com.kunlanw.design.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
-@Entity
-@Table(name = "log")
-@Getter
-@Setter
+/**
+ * @author 
+ */
 public class Log implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int logID;
-    private int userID;
-    private int projectID;
-    private BigDecimal amount;
-    private Date datachange_createtime;
-    private Date datachange_lasttime;
+    private Integer logid;
 
+    private Integer userid;
+
+    private Integer projectid;
+
+    private Date datachangeCreatetime;
+
+    private Date datachangeLasttime;
+
+    private Long amount;
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getLogid() {
+        return logid;
+    }
+
+    public void setLogid(Integer logid) {
+        this.logid = logid;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public Integer getProjectid() {
+        return projectid;
+    }
+
+    public void setProjectid(Integer projectid) {
+        this.projectid = projectid;
+    }
+
+    public Date getDatachangeCreatetime() {
+        return datachangeCreatetime;
+    }
+
+    public void setDatachangeCreatetime(Date datachangeCreatetime) {
+        this.datachangeCreatetime = datachangeCreatetime;
+    }
+
+    public Date getDatachangeLasttime() {
+        return datachangeLasttime;
+    }
+
+    public void setDatachangeLasttime(Date datachangeLasttime) {
+        this.datachangeLasttime = datachangeLasttime;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
 }

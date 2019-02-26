@@ -1,0 +1,187 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" -->
+        <!--"http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+<mapper namespace="com.kunlanw.design.dao.WalletMapper">
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.Wallet">
+    <id column="walletID" jdbcType="INTEGER" property="walletid" />
+    <result column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    walletID, userID, address, datachange_createtime, datachange_lasttime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wallet
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from wallet
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.Wallet">
+    insert into wallet (walletID, userID, address, 
+      datachange_createtime, datachange_lasttime
+      )
+    values (#{walletid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datachangeLasttime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.Wallet">
+    insert into wallet
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="walletid != null">
+        walletID,
+      </if>
+      <if test="userid != null">
+        userID,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="walletid != null">
+        #{walletid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.Wallet">
+    update wallet
+    <set>
+      <if test="userid != null">
+        userID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.Wallet">
+    update wallet
+    set userID = #{userid,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP}
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.Wallet">
+    <id column="walletID" jdbcType="INTEGER" property="walletid" />
+    <result column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    walletID, userID, address, datachange_createtime, datachange_lasttime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wallet
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from wallet
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.Wallet">
+    insert into wallet (walletID, userID, address, 
+      datachange_createtime, datachange_lasttime
+      )
+    values (#{walletid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datachangeLasttime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.Wallet">
+    insert into wallet
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="walletid != null">
+        walletID,
+      </if>
+      <if test="userid != null">
+        userID,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="walletid != null">
+        #{walletid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.Wallet">
+    update wallet
+    <set>
+      <if test="userid != null">
+        userID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLasttime != null">
+        datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.Wallet">
+    update wallet
+    set userID = #{userid,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP}
+    where walletID = #{walletid,jdbcType=INTEGER}
+  </update>
+</mapper>

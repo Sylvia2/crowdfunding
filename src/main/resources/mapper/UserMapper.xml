@@ -1,0 +1,1004 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+<mapper namespace="com.kunlanw.design.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.User">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpassword" jdbcType="VARCHAR" property="userpassword" />
+    <result column="useremail" jdbcType="VARCHAR" property="useremail" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
+    <result column="datechange_lasttime" jdbcType="TIMESTAMP" property="datechangeLasttime" />
+    <result column="datachange_last_time" jdbcType="TIMESTAMP" property="datachangeLastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, username, userpassword, useremail, sex, datachange_createtime, datechange_lasttime, 
+    datachange_last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (username, userpassword, useremail, 
+      sex, datachange_createtime, datechange_lasttime, 
+      datachange_last_time)
+    values (#{username,jdbcType=VARCHAR}, #{userpassword,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, #{datechangeLasttime,jdbcType=TIMESTAMP}, 
+      #{datachangeLastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.User">
+    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userpassword != null">
+        userpassword,
+      </if>
+      <if test="useremail != null">
+        useremail,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime,
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime,
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userpassword != null">
+        userpassword = #{userpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="useremail != null">
+        useremail = #{useremail,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="datachangeCreatetime != null">
+        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datechangeLasttime != null">
+        datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="datachangeLastTime != null">
+        datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      userpassword = #{userpassword,jdbcType=VARCHAR},
+      useremail = #{useremail,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
+      datechange_lasttime = #{datechangeLasttime,jdbcType=TIMESTAMP},
+      datachange_last_time = #{datachangeLastTime,jdbcType=TIMESTAMP}
+    where userID = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>
