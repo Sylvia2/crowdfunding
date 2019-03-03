@@ -21,7 +21,6 @@ public class User implements Serializable {
 
     private Date datechangeLasttime;
 
-    private Date datachangeLastTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -81,11 +80,4 @@ public class User implements Serializable {
         this.datechangeLasttime = datechangeLasttime;
     }
 
-    public Date getDatachangeLastTime() {
-        return datachangeLastTime;
-    }
-
-    public void setDatachangeLastTime(Date datachangeLastTime) {
-        this.datachangeLastTime = datachangeLastTime;
-    }
 }

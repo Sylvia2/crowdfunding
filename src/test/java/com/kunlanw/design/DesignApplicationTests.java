@@ -30,12 +30,12 @@ public class DesignApplicationTests {
         String address_to="0x76EE9b8B1A9FD86e4a235733dC0C9E9BAC202477";
         Fund fund=Fund.load(contractAddress,web3j,credentials,GAS_PRICE,GAS_LIMIT);
         System.out.println(fund.getContractAddress());
-        TransactionReceipt receipt=fund.setSuccessAmount(BigInteger.valueOf(20),address_to,BigInteger.ZERO).send();
-        System.out.println(fund.successAmount(address_to).send());
-        System.out.println(receipt.getGasUsed());
-        System.out.println(receipt.getTransactionHash());
-        System.out.println(fund.total().send());
-        System.out.println(fund.organizer().send());
+//        TransactionReceipt receipt=fund.setSuccessAmount(BigInteger.valueOf(20),address_to,BigInteger.ZERO).send();
+//        System.out.println(fund.successAmount(address_to).send());
+//        System.out.println(receipt.getGasUsed());
+//        System.out.println(receipt.getTransactionHash());
+//        System.out.println(fund.total().send());
+//        System.out.println(fund.organizer().send());
     }
 
 }

@@ -1,6 +1,7 @@
 package com.kunlanw.design.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ public class Project implements Serializable {
 
     private String projectname;
 
-    private Long projectamount;
+    private BigDecimal projectamount;
 
     private Integer walletid;
 
@@ -47,11 +48,11 @@ public class Project implements Serializable {
         this.projectname = projectname;
     }
 
-    public Long getProjectamount() {
+    public BigDecimal getProjectamount() {
         return projectamount;
     }
 
-    public void setProjectamount(Long projectamount) {
+    public void setProjectamount(BigDecimal projectamount) {
         this.projectamount = projectamount;
     }
 

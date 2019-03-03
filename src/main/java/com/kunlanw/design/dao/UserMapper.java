@@ -1,7 +1,9 @@
 package com.kunlanw.design.dao;
 
 import com.kunlanw.design.domain.User;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(Integer userid);
 
@@ -14,4 +16,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    User findByEmail(String email);
 }

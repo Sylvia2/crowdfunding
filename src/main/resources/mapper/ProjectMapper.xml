@@ -1,6 +1,6 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" -->
-        <!--"http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kunlanw.design.dao.ProjectMapper">
   <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.Project">
     <id column="projectID" jdbcType="INTEGER" property="projectid" />
@@ -8,15 +8,15 @@
     <result column="projectamount" jdbcType="DECIMAL" property="projectamount" />
     <result column="walletID" jdbcType="INTEGER" property="walletid" />
     <result column="userID" jdbcType="INTEGER" property="userid" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
+    <result column="description" jdbcType="VARCHAR" property="desc" />
     <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
-    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="typeID" jdbcType="INTEGER" property="type" />
     <result column="status" jdbcType="SMALLINT" property="status" />
     <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
     <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
   </resultMap>
   <sql id="Base_Column_List">
-    projectID, projectname, projectamount, walletID, userID, desc, deadline, type, status, 
+    projectID, projectname, projectamount, walletID, userID, description, deadline, typeID, status,
     datachange_createtime, datachange_lasttime
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -24,6 +24,35 @@
     <include refid="Base_Column_List" />
     from project
     where projectID = #{projectid,jdbcType=INTEGER}
+  </select>
+
+  <select id="findAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+     from project
+  </select>
+
+  <select id="findByUserID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from project
+    where userID=#{userid,jdbcType=INTEGER}
+  </select>
+
+  <select id="findByFilter" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from project
+    where 1=1
+    <if test="projectID !=null">
+      and projectID=#{projectID}
+    </if>
+    <if test="status != null">
+      and status=#{status}
+    </if>
+    <if test="typeId !=null">
+      and typeID=#{typeId}
+    </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from project
@@ -60,14 +89,17 @@
       <if test="walletid != null">
         walletID,
       </if>
+      <if test="userid !=null">
+        userID,
+      </if>
       <if test="desc != null">
-        desc,
+        description,
       </if>
       <if test="deadline != null">
         deadline,
       </if>
       <if test="type != null">
-        type,
+        typeID,
       </if>
       <if test="status != null">
         status,
@@ -91,6 +123,9 @@
       </if>
       <if test="walletid != null">
         #{walletid,jdbcType=INTEGER},
+      </if>
+      <if test="userid !=null">
+        #{userid,jdbcType=INTEGER},
       </if>
       <if test="desc != null">
         #{desc,jdbcType=VARCHAR},
@@ -128,13 +163,13 @@
         userID = #{userid,jdbcType=INTEGER},
       </if>
       <if test="desc != null">
-        desc = #{desc,jdbcType=VARCHAR},
+        description = #{desc,jdbcType=VARCHAR},
       </if>
       <if test="deadline != null">
         deadline = #{deadline,jdbcType=TIMESTAMP},
       </if>
       <if test="type != null">
-        type = #{type,jdbcType=INTEGER},
+        typeID = #{type,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=SMALLINT},
@@ -154,329 +189,9 @@
       projectamount = #{projectamount,jdbcType=DECIMAL},
       walletID = #{walletid,jdbcType=INTEGER},
       userID = #{userid,jdbcType=INTEGER},
-      desc = #{desc,jdbcType=VARCHAR},
+      description = #{desc,jdbcType=VARCHAR},
       deadline = #{deadline,jdbcType=TIMESTAMP},
-      type = #{type,jdbcType=INTEGER},
-      status = #{status,jdbcType=SMALLINT},
-      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
-      datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP}
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.Project">
-    <id column="projectID" jdbcType="INTEGER" property="projectid" />
-    <result column="projectname" jdbcType="VARCHAR" property="projectname" />
-    <result column="projectamount" jdbcType="DECIMAL" property="projectamount" />
-    <result column="walletID" jdbcType="INTEGER" property="walletid" />
-    <result column="userID" jdbcType="INTEGER" property="userid" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
-    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="status" jdbcType="SMALLINT" property="status" />
-    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
-    <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    projectID, projectname, projectamount, walletID, userID, desc, deadline, type, status, 
-    datachange_createtime, datachange_lasttime
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from project
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from project
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.kunlanw.design.domain.Project">
-    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into project (projectID, projectname, projectamount, 
-      walletID, desc, deadline, 
-      type, status, datachange_createtime, 
-      datachange_lasttime)
-    values (#{projectid,jdbcType=INTEGER}, #{projectname,jdbcType=VARCHAR}, #{projectamount,jdbcType=DECIMAL}, 
-      #{walletid,jdbcType=INTEGER}, #{desc,jdbcType=VARCHAR}, #{deadline,jdbcType=TIMESTAMP}, 
-      #{type,jdbcType=INTEGER}, #{status,jdbcType=SMALLINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, 
-      #{datachangeLasttime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.Project">
-    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into project
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="projectid != null">
-        projectID,
-      </if>
-      <if test="projectname != null">
-        projectname,
-      </if>
-      <if test="projectamount != null">
-        projectamount,
-      </if>
-      <if test="walletid != null">
-        walletID,
-      </if>
-      <if test="desc != null">
-        desc,
-      </if>
-      <if test="deadline != null">
-        deadline,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="datachangeCreatetime != null">
-        datachange_createtime,
-      </if>
-      <if test="datachangeLasttime != null">
-        datachange_lasttime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="projectid != null">
-        #{projectid,jdbcType=INTEGER},
-      </if>
-      <if test="projectname != null">
-        #{projectname,jdbcType=VARCHAR},
-      </if>
-      <if test="projectamount != null">
-        #{projectamount,jdbcType=DECIMAL},
-      </if>
-      <if test="walletid != null">
-        #{walletid,jdbcType=INTEGER},
-      </if>
-      <if test="desc != null">
-        #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="deadline != null">
-        #{deadline,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="datachangeCreatetime != null">
-        #{datachangeCreatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="datachangeLasttime != null">
-        #{datachangeLasttime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.Project">
-    update project
-    <set>
-      <if test="projectname != null">
-        projectname = #{projectname,jdbcType=VARCHAR},
-      </if>
-      <if test="projectamount != null">
-        projectamount = #{projectamount,jdbcType=DECIMAL},
-      </if>
-      <if test="walletid != null">
-        walletID = #{walletid,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null">
-        userID = #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="desc != null">
-        desc = #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="deadline != null">
-        deadline = #{deadline,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="datachangeCreatetime != null">
-        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="datachangeLasttime != null">
-        datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.Project">
-    update project
-    set projectname = #{projectname,jdbcType=VARCHAR},
-      projectamount = #{projectamount,jdbcType=DECIMAL},
-      walletID = #{walletid,jdbcType=INTEGER},
-      userID = #{userid,jdbcType=INTEGER},
-      desc = #{desc,jdbcType=VARCHAR},
-      deadline = #{deadline,jdbcType=TIMESTAMP},
-      type = #{type,jdbcType=INTEGER},
-      status = #{status,jdbcType=SMALLINT},
-      datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
-      datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP}
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.kunlanw.design.domain.Project">
-    <id column="projectID" jdbcType="INTEGER" property="projectid" />
-    <result column="projectname" jdbcType="VARCHAR" property="projectname" />
-    <result column="projectamount" jdbcType="DECIMAL" property="projectamount" />
-    <result column="walletID" jdbcType="INTEGER" property="walletid" />
-    <result column="userID" jdbcType="INTEGER" property="userid" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
-    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="status" jdbcType="SMALLINT" property="status" />
-    <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
-    <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    projectID, projectname, projectamount, walletID, userID, desc, deadline, type, status, 
-    datachange_createtime, datachange_lasttime
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from project
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from project
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.kunlanw.design.domain.Project">
-    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into project (projectID, projectname, projectamount, 
-      walletID, desc, deadline, 
-      type, status, datachange_createtime, 
-      datachange_lasttime)
-    values (#{projectid,jdbcType=INTEGER}, #{projectname,jdbcType=VARCHAR}, #{projectamount,jdbcType=DECIMAL}, 
-      #{walletid,jdbcType=INTEGER}, #{desc,jdbcType=VARCHAR}, #{deadline,jdbcType=TIMESTAMP}, 
-      #{type,jdbcType=INTEGER}, #{status,jdbcType=SMALLINT}, #{datachangeCreatetime,jdbcType=TIMESTAMP}, 
-      #{datachangeLasttime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.kunlanw.design.domain.Project">
-    <selectKey keyProperty="userid" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into project
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="projectid != null">
-        projectID,
-      </if>
-      <if test="projectname != null">
-        projectname,
-      </if>
-      <if test="projectamount != null">
-        projectamount,
-      </if>
-      <if test="walletid != null">
-        walletID,
-      </if>
-      <if test="desc != null">
-        desc,
-      </if>
-      <if test="deadline != null">
-        deadline,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="datachangeCreatetime != null">
-        datachange_createtime,
-      </if>
-      <if test="datachangeLasttime != null">
-        datachange_lasttime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="projectid != null">
-        #{projectid,jdbcType=INTEGER},
-      </if>
-      <if test="projectname != null">
-        #{projectname,jdbcType=VARCHAR},
-      </if>
-      <if test="projectamount != null">
-        #{projectamount,jdbcType=DECIMAL},
-      </if>
-      <if test="walletid != null">
-        #{walletid,jdbcType=INTEGER},
-      </if>
-      <if test="desc != null">
-        #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="deadline != null">
-        #{deadline,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="datachangeCreatetime != null">
-        #{datachangeCreatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="datachangeLasttime != null">
-        #{datachangeLasttime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kunlanw.design.domain.Project">
-    update project
-    <set>
-      <if test="projectname != null">
-        projectname = #{projectname,jdbcType=VARCHAR},
-      </if>
-      <if test="projectamount != null">
-        projectamount = #{projectamount,jdbcType=DECIMAL},
-      </if>
-      <if test="walletid != null">
-        walletID = #{walletid,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null">
-        userID = #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="desc != null">
-        desc = #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="deadline != null">
-        deadline = #{deadline,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="datachangeCreatetime != null">
-        datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="datachangeLasttime != null">
-        datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where projectID = #{projectid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.kunlanw.design.domain.Project">
-    update project
-    set projectname = #{projectname,jdbcType=VARCHAR},
-      projectamount = #{projectamount,jdbcType=DECIMAL},
-      walletID = #{walletid,jdbcType=INTEGER},
-      userID = #{userid,jdbcType=INTEGER},
-      desc = #{desc,jdbcType=VARCHAR},
-      deadline = #{deadline,jdbcType=TIMESTAMP},
-      type = #{type,jdbcType=INTEGER},
+      typeID = #{type,jdbcType=INTEGER},
       status = #{status,jdbcType=SMALLINT},
       datachange_createtime = #{datachangeCreatetime,jdbcType=TIMESTAMP},
       datachange_lasttime = #{datachangeLasttime,jdbcType=TIMESTAMP}
