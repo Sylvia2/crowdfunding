@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" type="text/css" href="../index.css">
+    <title>登录</title>
+</head>
+<body>
+<div id="app" class="login">
+    <el-card class="box-card">
+        <div slot="header" class="clearfix">
+            <span>登录</span>
+        </div>
+        <div>
+            <el-form :model="loginForm" label-width="80px">
+                <el-form-item prop="userEmail" label="邮箱" :rules="[
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ]">
+                    <el-col :span="15">
+                        <el-input v-model="loginForm.userEmail" placeholder="请输入邮箱" ></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item prop="password" label="密码" :rules="[
+                 { required: true, message: '密码不能为空', trigger: 'blur' },
+                ]">
+                    <el-col :span="15">
+                        <el-input placeholder="请输入密码" v-model="loginForm.password" show-password></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item>
+                    <el-col :span="15">
+                        <el-button type="primary" @click="submitForm">登录</el-button>
+                        <el-button type="success"  @click="register">注册</el-button>
+                    </el-col>
+
+                </el-form-item>
+            </el-form>
+        </div>
+    </el-card>
+</div>
+</body>
+<!-- import axios -->
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var app;
+    app = new Vue({
+        el: "#app",
+        data: function () {
+            return {
+                loginForm:{
+                    userEmail: '',
+                    password: ''
+                }
+            }
+        },
+        methods: {
+            submitForm(){
+                axios.post('/user/login', {
+                    email:this.loginForm.userEmail,
+                    pwd: this.loginForm.password
+                })
+                    .then(function (response) {
+                        if(response.data.code<0){
+                            alert(response.data.message);
+                        }else{
+                            window.location.href="/index";
+                        }
+                    })
+                    .catch(function (error) {
+                        alert(error)
+                    });
+            },
+            register(){
+                window.location.href="/register";
+            }
+
+
+        }
+    });
+</script>
+</html>

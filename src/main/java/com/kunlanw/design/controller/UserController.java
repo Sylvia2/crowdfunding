@@ -59,7 +59,7 @@ public class UserController {
                 throw new Exception("密码不正确");
             }
             UserEntity entity=this.userService.getUserById(user.getUserid());
-            result.setResult(entity);
+            result.setResult(entity.getUserid());
             result.setMessage("successful");
         }catch (Exception e){
             result.setCode(-1);

@@ -1,0 +1,72 @@
+/* .text {
+           font-size: 14px;
+       }
+
+       .item {
+           margin-bottom: 18px;
+       } */
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+.clearfix:after {
+    clear: both
+}
+
+.box-card {
+    width: 480px;
+    text-align: center;
+}
+.login{
+    height:50px;/**高度**/
+    position:absolute;/**绝对定位**/
+    left:40%;/**左边50%**/
+    top:50%;/**顶部50%**/
+    margin-top:-200px;/**上移-50%**/
+    margin-left:-100px;/**左移-50%**/
+}
+.el-input__inner{
+    width: auto;
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height:520px;
+}
+.background{
+    background-color:rgb(84, 92, 100);
+}
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+}
+.el-header, .el-footer {
+    background-color: rgb(84, 92, 100);
+    color: white;
+    text-align: center;
+    line-height: 60px;
+}
+
+.el-aside {
+    background-color: rgb(84, 92, 100);
+    color: white;
+    text-align: center;
+    line-height: auto;
+}
+body > .el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+}
