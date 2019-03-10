@@ -2,9 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" type="text/css" href="../index.css">
     <title>注册新用户</title>
 </head>
 <body>
+<div id="app2"  class="login">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>注册新用户</span>
+                </div>
+                <div>
+                    <el-form :model="registerForm" label-width="80px">
+                        <el-form-item prop="username" label="用户名" :rules="[
+                        {required:true,message:'请输入用户名',trigger:'blur'}
+                        ]">
+                            <el-col :span="15">
+                                <el-input v-model="registerForm.username" placeholder="请输入用户名" clearable></el-input>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item prop="userEmail" label="邮箱" :rules="[
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ]">
+                            <el-col :span="15">
+                                <el-input v-model="registerForm.userEmail" placeholder="请输入邮箱" clearable></el-input>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item prop="password" label="密码" :rules="[
+                 { required: true, message: '密码不能为空', trigger: 'blur' },
+                ]">
+                            <el-col :span="15">
+                                <el-input placeholder="请输入密码" v-model="registerForm.password" show-password clearable></el-input>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item prop="sex" label="性别" :rules="[{
+                        required: true, message: '必选', trigger: 'blur'
+                        },]">
+                            <el-col :span="15">
+                                <template>
+                                    <el-radio v-model="registerForm.sex" label="1">女</el-radio>
+                                    <el-radio v-model="registerForm.sex" label="2">男</el-radio>
+                                </template>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-col :span="15">
+                                <el-button type="success"  @click="register">注册</el-button>
+                            </el-col>
+
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-card>
+
+</div>
 
 </body>
 <!-- import Vue before Element -->
@@ -14,6 +66,44 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+    var app;
+    app = new Vue({
+        el: "#app2",
+        data: function () {
+            return {
+                registerForm:{
+                    username:'',
+                    userEmail: '',
+                    password: '',
+                    sex:1
+                }
+            }
+        },
+        methods: {
+            register(){
+                if(this.registerForm.username===''||this.registerForm.userEmail===''||
+                    this.registerForm.password===''){
+                    alert("请完善个人信息");
+                }else{
+                    axios.post('/user/register', {
+                        username:this.registerForm.username,
+                        useremail:this.registerForm.userEmail,
+                        userpassword: this.registerForm.password,
+                        sex:this.registerForm.sex
+                    }).then((response)=>{
+                        if(response.data.code<0){
+                            alert(response.data.message);
+                        }else{
+                            window.location.href="/index";
+                        }
+                    }).catch( (error)=> {
+                        alert(error);
+                    });
+                }
+
+            }
+        }
+    });
 
 </script>
 </html>

@@ -22,4 +22,19 @@ public class HomeController {
     public String register(){
         return "register";
     }
+
+    @RequestMapping(value = "/project",method = RequestMethod.GET)
+    public String project(){
+        return "/project";
+    }
+
+    @RequestMapping(value = "/manage",method = RequestMethod.GET)
+    public String manage(){
+        return "manage";
+    }
+
+    @RequestMapping(value = "/data",method = RequestMethod.GET)
+    public String data(){
+        return "data";
+    }
 }

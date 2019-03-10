@@ -31,7 +31,7 @@
     width: auto;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
+    width: 180px;
     min-height:520px;
 }
 .background{

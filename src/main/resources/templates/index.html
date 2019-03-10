@@ -20,21 +20,17 @@
                         background-color="#545c64"
                         text-color="#fff"
                         active-text-color="#ffd04b">
-                    <!-- <el-menu-item index="1">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">众筹中心</span>
-                    </el-menu-item> -->
                     <el-menu-item index="1">
                         <i class="el-icon-menu"></i>
-                        <span slot="title">众筹项目中心</span>
+                        <span>众筹项目中心</span>
                     </el-menu-item>
                     <el-menu-item index="2">
                         <i class="el-icon-setting"></i>
-                        <span slot="title">管理我的众筹</span>
+                        <a href="manage" target="_blank" style="text-decoration:none; color: rgb(255, 255, 255)">管理我的众筹</a>
                     </el-menu-item>
                     <el-menu-item index="3">
                         <i class="el-icon-document"></i>
-                        <span slot="title">平台数据分析</span>
+                        <a href="data" target="_blank" style="text-decoration:none; color: rgb(255, 255, 255)">平台数据分析</a>
                     </el-menu-item>
                     <el-submenu index="4">
                         <template slot="title">
@@ -44,11 +40,11 @@
                         <el-menu-item-group>
                             <el-menu-item index="4-1">
                                 <i class="el-icon-star-on"></i>
-                                <span>钱包管理</span>
+                                <a href="wallet" target="_blank" style="text-decoration:none; color: rgb(255, 255, 255)">钱包管理</a>
                             </el-menu-item>
                             <el-menu-item index="4-2">
                                 <i class="el-icon-info"></i>
-                                <span>个人主页</span>
+                                <a href="userDetail" target="_blank" style="text-decoration:none; color: rgb(255, 255, 255)">个人主页</a>
                             </el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
@@ -104,7 +100,7 @@
                                 </template>
                             </el-table-column>
                             <el-table-column prop="type" label="操作" width="auto">
-                                <el-button type="primary">查看</el-button>
+                                <el-button type="primary" @click="getDetail">查看</el-button>
                             </el-table-column>
 
                         </el-table>
@@ -135,6 +131,9 @@
                 projects:[]
             }
         },
+        created: function () {
+            this.filterProject();
+        },
         methods:{
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
@@ -157,7 +156,14 @@
                     .catch((error) => {
                         alert(error)
                     });
+            },
+            getDetail(){
+                window.location.href="/project/";
+            },
+            goToIndex(){
+                window.location.href="/index";
             }
+
         }
     })
 </script>
