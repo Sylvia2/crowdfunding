@@ -34,19 +34,19 @@
     width: 180px;
     min-height:520px;
 }
-.background{
-    background-color:rgb(84, 92, 100);
-}
+/*.background{*/
+    /*background-color:rgb(84, 92, 100);*/
+/*}*/
 body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    box-sizing: border-box;
+    /*box-sizing: border-box;*/
+    /*text-rendering: optimizeLegibility;*/
+    /*-webkit-font-smoothing: antialiased;*/
 }
+
 .el-header, .el-footer {
-    background-color: rgb(84, 92, 100);
+    background-color: #409EFF;
     color: white;
     text-align: center;
     line-height: 60px;
