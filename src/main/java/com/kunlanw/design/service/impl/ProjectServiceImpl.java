@@ -3,12 +3,15 @@ package com.kunlanw.design.service.impl;
 import com.kunlanw.design.contract.IFundService;
 import com.kunlanw.design.dao.LogMapper;
 import com.kunlanw.design.dao.ProjectMapper;
+import com.kunlanw.design.dao.UserMapper;
 import com.kunlanw.design.dao.WalletMapper;
 import com.kunlanw.design.domain.Log;
 import com.kunlanw.design.domain.Project;
+import com.kunlanw.design.domain.User;
 import com.kunlanw.design.domain.Wallet;
 import com.kunlanw.design.model.ContractProject;
 import com.kunlanw.design.model.FundEntity;
+import com.kunlanw.design.model.ProjectEntity;
 import com.kunlanw.design.model.ProjectFilter;
 import com.kunlanw.design.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +33,28 @@ public class ProjectServiceImpl implements IProjectService {
     private WalletMapper walletMapper;
     @Resource
     private LogMapper logMapper;
+    @Resource
+    private UserMapper userMapper;
 
     @Override
-    public Project getByID(int id) {
+    public ProjectEntity getByID(int id) {
         try{
-            return projectMapper.selectByPrimaryKey(id);
+            Project project=this.projectMapper.selectByPrimaryKey(id);
+            ProjectEntity projectEntity=new ProjectEntity();
+            projectEntity.setProjectid(project.getProjectid());
+            projectEntity.setDesc(project.getDesc());
+            projectEntity.setDeadline(project.getDeadline()==null?new Date():project.getDeadline());
+            projectEntity.setProjectamount(project.getProjectamount());
+            projectEntity.setProjectname(project.getProjectname());
+            projectEntity.setStatus(project.getStatus());
+            projectEntity.setUserid(project.getUserid());
+            projectEntity.setWalletid(project.getWalletid());
+            projectEntity.setType(project.getType());
+            projectEntity.setUsername("五十资本");
+            projectEntity.setWalletAddress("x432h4b242h4b2kj4n31k4b1b");
+           // projectEntity.setUsername(this.userMapper.selectByPrimaryKey(project.getUserid()).getUsername());
+            //projectEntity.setWalletAddress(this.walletMapper.selectByPrimaryKey(project.getWalletid()).getAddress());
+            return projectEntity;
         }catch (Exception e){
             return null;
         }

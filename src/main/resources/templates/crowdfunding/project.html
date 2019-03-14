@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" type="text/css" href="../index.css">
+    <link rel="stylesheet" type="text/css" href="../../static/index.css">
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+     <!--最新的 Bootstrap 核心 JavaScript 文件-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <title>项目详情页</title>
@@ -30,36 +28,35 @@
                         <table class="table">
                             <tr>
                                 <td width="100px"><b>项目ID：</b></td>
-                                <td>12123</td>
+                                <td th:text="${projectDetail.projectid}"></td>
                             </tr>
                             <tr>
                                 <td><b>项目名称：</b></td>
-                                <td>天使资本</td>
+                                <td th:text="${projectDetail.projectname}"></td>
                             </tr>
                             <tr>
                                 <td><b>项目简介：</b></td>
-                                <td>首先，创业门槛较低。现在许多的众筹网站主打的一个卖点都是“实现你的梦想”。这句话的潜台词是“之前创业门槛高，众筹帮你降低这个障碍”。从实际的案例来看，众筹平台确实帮助许多草根创业者融到资金，并推出了既定的产品。这个过程如果走传统的融资路线会比较艰难，因为VC可能不看好你的这个Idea，况且你没有产品做出来也很难得到VC的认可。
-                                </td>
+                                <td th:text="${projectDetail.desc}"></td>
                             </tr>
                             <tr>
                                 <td><b>发起人：</b></td>
-                                <td>五十资本</td>
+                                <td th:text="${projectDetail.username}"></td>
                             </tr>
                             <tr>
                                 <td><b>资金流向：</b></td>
-                                <td>0xaaFbb55d31aB1455758dA29Bd0C62d80d6E2fBa7</td>
+                                <td th:text="${projectDetail.walletAddress}"></td>
                             </tr>
                             <tr>
-                                <td><b>目标金额：</b></td>
-                                <td>200Ether</td>
+                                <td><b>目标金额(Ether)：</b></td>
+                                <td th:text="${projectDetail.projectamount}"></td>
                             </tr>
                             <tr>
                                 <td><b>项目类别：</b></td>
-                                <td>启动资金</td>
+                                <td th:text="${projectDetail.type}"></td>
                             </tr>
                             <tr>
                                 <td><b>截止时间</b></td>
-                                <td>2019/05/20</td>
+                                <td th:text="${projectDetail.deadline}"></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -127,19 +124,25 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.js"></script>
 <script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
-<script>
+<script th:inline="javascript">
     var app=new Vue({
         el:"#app",
         data:function () {
             return {
-                stepActive:2,
+                /*<![CDATA[*/
+                stepActive :/*[[${projectDetail.status}]]*/ 1,
+            /*]]>*/
                 realAmount:50,
                 fundForm:{
                     fromID:'',
-                    toID:'0xaaFbb55d31aB1455758dA29Bd0C62d80d6E2fBa7',
+                    /*<![CDATA[*/
+                    toID :/*[[${projectDetail.walletAddress}]]*/ '',
+                    /*]]>*/
                     amount:null
                 }
             }
+        },
+        created: function () {
         },
         methods:{
             fund(){
@@ -152,7 +155,7 @@
                 })
             }
         }
-    })
+    });
     let AmountChart=echarts.init(document.getElementById('realTimeAmount'));
     let  option = {
         title:{

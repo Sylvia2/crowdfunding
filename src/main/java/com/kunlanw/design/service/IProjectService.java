@@ -3,6 +3,7 @@ package com.kunlanw.design.service;
 import com.kunlanw.design.domain.Project;
 import com.kunlanw.design.model.ContractProject;
 import com.kunlanw.design.model.FundEntity;
+import com.kunlanw.design.model.ProjectEntity;
 import com.kunlanw.design.model.ProjectFilter;
 
 import java.math.BigInteger;
@@ -16,7 +17,7 @@ public interface IProjectService {
      * @param id
      * @return
      */
-    Project getByID(int id);
+    ProjectEntity getByID(int id);
 
     /**
      * 创建项目
@@ -36,6 +37,7 @@ public interface IProjectService {
     boolean fundProject(int id, FundEntity entity)throws Exception;
 
     ContractProject getProjectOnContract(int id)throws Exception;
+
 
 
 }

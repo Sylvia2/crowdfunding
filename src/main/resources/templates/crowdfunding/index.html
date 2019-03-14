@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" type="text/css" href="../index.css">
+    <link rel="stylesheet" type="text/css" href="../../static/index.css">
     <title>众筹中心</title>
 </head>
 <body>
@@ -99,10 +99,14 @@
                                     <span v-if="scope.row.type == 2" >慈善</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="type" label="操作" width="auto">
-                                <el-button type="primary" @click="getDetail">查看</el-button>
+                            <el-table-column
+                                    prop="operation"
+                                    label="操作"
+                                    width="180">
+                                <template scope="scope">
+                                    <el-button @click="getDetail(scope.row)" type="primary">查看</el-button>
+                                </template>
                             </el-table-column>
-
                         </el-table>
                     </template>
                 </div>
@@ -157,8 +161,8 @@
                         alert(error)
                     });
             },
-            getDetail(){
-                window.location.href="/project/";
+            getDetail(val){
+                window.location.href="/project/getById/"+val.projectid;
             },
             goToIndex(){
                 window.location.href="/index";
