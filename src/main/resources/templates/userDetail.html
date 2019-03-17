@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" type="text/css" href="../index.css">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <title>个人中心</title>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>基于区块链交易的众筹平台</el-header>
+        <el-container>
+            <el-aside width="auto">
+                <el-menu
+                        default-active="4"
+                        class="el-menu-vertical-demo"
+                        @open="handleOpen"
+                        @close="handleClose"
+                        background-color="#545c64"
+                        text-color="#fff"
+                        active-text-color="#ffd04b">
+                    <el-menu-item index="1">
+                        <i class="el-icon-menu"></i>
+                        <a href="/index" target="_parent"
+                           style="text-decoration:none; color: rgb(255, 255, 255)">众筹项目中心</a>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <i class="el-icon-setting"></i>
+                        <a href="/manage" target="_blank"
+                           style="text-decoration:none; color: rgb(255, 255, 255)">管理我的众筹</a>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                        <i class="el-icon-document"></i>
+                        <a href="/data" target="_blank"
+                           style="text-decoration:none; color: rgb(255, 255, 255)">平台数据分析</a>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                        <i class="el-icon-location"></i>
+                        <a href="/user/userDetail" target="_parent"
+                           style="text-decoration:none; color: rgb(255, 255, 255)">个人中心 &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    </el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-main>
+                <el-row type="flex">
+                    <el-col :span="4" justify="center"></el-col>
+                    <el-col :span="16" justify="center">
+                        <el-card shadow="hover">
+                            <el-button type="primary" @click="edit()" icon="el-icon-edit" circle></el-button>
+                            <el-dialog title="编辑个人信息" :visible.sync="dialogFormVisible">
+                                <el-form :model="userForm">
+                                    <el-form-item label="用户昵称" :label-width="formLabelWidth">
+                                        <el-input v-model="userForm.name" autocomplete="off"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="用户邮箱" :label-width="formLabelWidth">
+                                        <el-input v-model="userForm.email" autocomplete="off"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="性别 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" :label-width="formLabelWidth">
+                                        <el-select v-model="userForm.sex" placeholder="性别">
+                                            <el-option lable="请选择" value="null"></el-option>
+                                            <el-option label="女" value="1"></el-option>
+                                            <el-option label="男" value="2"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-form>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                    <el-button type="primary" @click="updateUser">确 定</el-button>
+                                </div>
+                            </el-dialog>
+                            <table class="table">
+                                <tr>
+                                    <td width="100px"><b>用户昵称：</b></td>
+                                    <td th:text="${details.name}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>用户邮箱</b></td>
+                                    <td th:text="${details.email}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>性别</b></td>
+                                    <td th:if="${details.sex}==1">女</td>
+                                    <td th:if="${details.sex}==2">男</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <el-collapse accordion>
+                                            <el-collapse-item>
+                                                <template slot="title">
+                                                    <i class="header-icon el-icon-bell"></i>
+                                                    <span>钱包</span>
+                                                </template>
+                                                <el-table :data="wallets">
+                                                    <el-table-column prop="address" label="钱包地址"
+                                                                     width="400px"></el-table-column>
+                                                    <el-table-column prop="amount" label="钱包余额"
+                                                                     width="100px"></el-table-column>
+                                                </el-table>
+                                            </el-collapse-item>
+                                        </el-collapse>
+                                    </td>
+                                </tr>
+                            </table>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="4" justify="center"></el-col>
+                </el-row>
+
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script th:inline="javascript">
+    var app = new Vue({
+        el: "#app",
+        data: function () {
+            return {
+                wallets: [],
+                userForm: {
+                    /*<![CDATA[*/
+                    name :/*[[${details.name}]]*/ '',
+                    email :/*[[${details.email}]]*/ '',
+                    /*]]>*/
+                    sex :null
+                },
+                dialogFormVisible:false
+            }
+        },
+        created: function () {
+            this.getWallets();
+        },
+        methods: {
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            getWallets() {
+                axios.get('/wallet/getWalletByUserId', {}
+                ).then((response) => {
+                    if (response.data.code < 0) {
+                        alert(response.data.message);
+                    } else {
+                        this.wallets = response.data.result;
+                    }
+                }).catch((error) => {
+                    alert(error);
+                })
+            },
+            updateUser(){
+                axios.post('/user/update',
+                this.userForm
+                ).then((response)=>{
+                    if(response.data.code<0){
+                        alert(response.data.message);
+                    }else{
+                        window.location.href="/user/userDetail";
+                    }
+                }).catch((error)=>{
+                    alert(error);
+                })
+
+            },
+            edit(){
+                this.dialogFormVisible=true;
+            }
+
+        }
+    })
+</script>
+</html>

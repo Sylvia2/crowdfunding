@@ -2,17 +2,20 @@ package com.kunlanw.design.controller;
 
 import com.kunlanw.design.contract.IFundService;
 import com.kunlanw.design.domain.Project;
-import com.kunlanw.design.model.ContractProject;
-import com.kunlanw.design.model.FundEntity;
-import com.kunlanw.design.model.ProjectEntity;
-import com.kunlanw.design.model.ProjectFilter;
+import com.kunlanw.design.model.*;
+import com.kunlanw.design.service.ILoggerService;
 import com.kunlanw.design.service.IProjectService;
+import com.kunlanw.design.until.Constant;
 import com.kunlanw.design.until.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.web3j.abi.datatypes.Int;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import javax.swing.plaf.synth.Region;
 import java.util.List;
 
 
@@ -24,6 +27,9 @@ public class ProjectController {
     private IProjectService projectService;
     @Autowired
     private IFundService fundService;
+    @Autowired
+    private ILoggerService loggerService;
+
 
     /**
      * 根据ID获取项目详情
@@ -36,7 +42,8 @@ public class ProjectController {
         try {
             ProjectEntity project = this.projectService.getByID(id);
             model.addAttribute("projectDetail",project);
-            return "crowdfunding/project";
+
+            return "project";
         } catch (Exception e) {
             return "common/404";
         }
@@ -50,11 +57,12 @@ public class ProjectController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult create(@RequestBody Project project) {
+    public ResponseResult create(@RequestBody ProjectEdit project,HttpSession session) {
         ResponseResult result = new ResponseResult();
         result.setCode(0);
         try {
-            boolean res=this.projectService.createProject(project);
+            int userid=(Integer) session.getAttribute(Constant.User_Session);
+            boolean res=this.projectService.createProject(project,userid);
             result.setResult(res);
             result.setMessage("successful");
         } catch (Exception e) {
@@ -75,7 +83,7 @@ public class ProjectController {
         ResponseResult result = new ResponseResult();
         result.setCode(0);
         try {
-            List<Project> list = this.projectService.getAll();
+            List<ProjectEntity> list = this.projectService.getAll();
             if (list != null && !list.isEmpty()) {
                 result.setResult(list);
             }
@@ -99,7 +107,7 @@ public class ProjectController {
         ResponseResult result = new ResponseResult();
         result.setCode(0);
         try {
-            List<Project> list = this.projectService.getByFilter(filter);
+            List<ProjectEntity> list = this.projectService.getByFilter(filter);
             if (list != null && !list.isEmpty()) {
                 result.setResult(list);
             }
@@ -118,9 +126,9 @@ public class ProjectController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/updateProject/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateProject/{id}", method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseResult updateProject(@PathVariable int id, @RequestBody Project project) {
+    public ResponseResult updateProject(@PathVariable int id, @RequestBody ProjectEdit project) {
         ResponseResult result = new ResponseResult();
         result.setCode(0);
         try {
@@ -204,5 +212,49 @@ public class ProjectController {
     }
 
 
+    /**
+     * 获取用户创建的众筹list
+     * @return
+     */
+    @RequestMapping(value = "/getCreatedProjects",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult getCreatedProjects( Model model, HttpSession session
+    ){
+        ResponseResult result = new ResponseResult();
+        int userId=(Integer) session.getAttribute(Constant.User_Session);
+        result.setCode(0);
+        try {
+            List<ProjectEntity> createdProjects=this.projectService.getCreatedProject(userId);
+            if(createdProjects!=null){
+                result.setResult(createdProjects);
+            }
+            return result;
+        } catch (Exception e) {
+            result.setCode(-1);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+
+    }
+
+    @RequestMapping(value = "/getJoinProjects",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult getJoinProjects(Model model,HttpSession session){
+        ResponseResult result = new ResponseResult();
+        result.setCode(0);
+        try {
+            int userId=(Integer) session.getAttribute(Constant.User_Session);
+            List<ProjectEntity> joinProjects=this.loggerService.getByUserid(userId);
+            if(joinProjects!=null){
+                result.setResult(joinProjects);
+            }
+            return result;
+        } catch (Exception e) {
+            result.setCode(-1);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+
+    }
 
 }

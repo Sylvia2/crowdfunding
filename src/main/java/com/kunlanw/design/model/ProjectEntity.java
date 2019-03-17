@@ -7,17 +7,17 @@ import java.util.Date;
 
 @Data
 public class ProjectEntity {
-    private Integer projectid;
+    private int projectid;
 
     private String projectname;
 
     private BigDecimal projectamount;
 
-    private Integer walletid;
+    private int walletid;
 
     private String walletAddress;
 
-    private Integer userid;
+    private int userid;
 
     private String username;
 
@@ -25,9 +25,11 @@ public class ProjectEntity {
 
     private Date deadline;
 
-    private Integer type;
+    private int type;
 
-    private Short status;
+    private short status;
+
+    private String dateName;
 
 
 

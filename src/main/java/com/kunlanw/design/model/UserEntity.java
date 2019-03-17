@@ -1,6 +1,5 @@
 package com.kunlanw.design.model;
 
-import com.kunlanw.design.domain.Project;
 import com.kunlanw.design.domain.Wallet;
 import lombok.Data;
 
@@ -13,5 +12,4 @@ public class UserEntity {
     private String email;
     private Byte sex;
     private List<Wallet> wallets;
-    private List<Project> projects;
 }

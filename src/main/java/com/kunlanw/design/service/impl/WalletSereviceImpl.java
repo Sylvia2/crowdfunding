@@ -1,13 +1,18 @@
 package com.kunlanw.design.service.impl;
 
+import com.kunlanw.design.contract.IFundService;
 import com.kunlanw.design.dao.WalletMapper;
 import com.kunlanw.design.domain.Wallet;
+import com.kunlanw.design.model.WalletEntity;
 import com.kunlanw.design.service.IWalletService;
+import com.kunlanw.design.until.ListUility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.awt.geom.AreaOp;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +22,8 @@ public class WalletSereviceImpl implements IWalletService {
 
     @Resource
     private WalletMapper walletMapper;
+    @Autowired
+    private IFundService fundService;
 
     @Override
     public boolean createWallet(Wallet wallet) {
@@ -36,10 +43,20 @@ public class WalletSereviceImpl implements IWalletService {
     }
 
     @Override
-    public List<Wallet> getWalletByUserId(int userId) throws Exception {
+    public List<WalletEntity> getWalletByUserId(int userId) throws Exception {
         try{
+            List<WalletEntity> res=new ArrayList<>();
             List<Wallet> wallets=this.walletMapper.findByUserID(userId);
-            return wallets;
+            if(wallets!=null&& !wallets.isEmpty()){
+                for(Wallet item:wallets){
+                    WalletEntity entity=new WalletEntity();
+                    entity.setAddress(item.getAddress());
+                    entity.setId(item.getWalletid());
+                    entity.setAmount(this.fundService.getWalletAmount(item.getAddress())==null?BigDecimal.ZERO:this.fundService.getWalletAmount(item.getAddress()));
+                    res.add(entity);
+                }
+            }
+            return res;
         }catch (Exception e ){
             throw new Exception("获取用户的钱包地址失败");
         }

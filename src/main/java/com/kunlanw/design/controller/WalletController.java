@@ -1,11 +1,14 @@
 package com.kunlanw.design.controller;
 
 import com.kunlanw.design.domain.Wallet;
+import com.kunlanw.design.model.WalletEntity;
 import com.kunlanw.design.service.IWalletService;
+import com.kunlanw.design.until.Constant;
 import com.kunlanw.design.until.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -37,15 +40,15 @@ public class WalletController {
 
     /**
      * 获取用户钱包地址
-     * @param id
      * @return
      */
-    @RequestMapping(value = "/getWalletByUserId/{id}",method = RequestMethod.GET)
-    public ResponseResult getWalletByUserId(@PathVariable int id){
+    @RequestMapping(value = "/getWalletByUserId",method = RequestMethod.GET)
+    public ResponseResult getWalletByUserId(HttpSession session){
         ResponseResult  result=new ResponseResult();
         result.setCode(0);
         try{
-            List<Wallet> wallets=this.walletService.getWalletByUserId(id);
+            int id=(Integer) session.getAttribute(Constant.User_Session);
+            List<WalletEntity> wallets=this.walletService.getWalletByUserId(id);
             if(wallets!=null&&!wallets.isEmpty()){
                 result.setResult(wallets);
             }

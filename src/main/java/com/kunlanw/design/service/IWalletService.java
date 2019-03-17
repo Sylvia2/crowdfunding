@@ -1,6 +1,7 @@
 package com.kunlanw.design.service;
 
 import com.kunlanw.design.domain.Wallet;
+import com.kunlanw.design.model.WalletEntity;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface IWalletService {
      * @param userId
      * @return
      */
-    List<Wallet> getWalletByUserId(int userId) throws Exception;
+    List<WalletEntity> getWalletByUserId(int userId) throws Exception;
 
     /**
      * 删除钱包

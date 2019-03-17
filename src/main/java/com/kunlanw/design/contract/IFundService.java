@@ -2,6 +2,7 @@ package com.kunlanw.design.contract;
 
 
 import com.kunlanw.design.model.ContractProject;
+import com.kunlanw.design.model.WalletEntity;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -16,5 +17,7 @@ public interface IFundService {
     boolean fund(String address_to,String address_from,BigInteger amount);
 
     ContractProject getProjectOnContract(String address) throws Exception;
+
+    BigDecimal getWalletAmount(String address)throws Exception;
 
 }

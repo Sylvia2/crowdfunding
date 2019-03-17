@@ -1,14 +1,22 @@
 package com.kunlanw.design.contract;
 
 
+import ch.qos.logback.core.pattern.ConverterUtil;
+import com.kunlanw.design.domain.Wallet;
 import com.kunlanw.design.model.ContractProject;
+import com.kunlanw.design.model.WalletEntity;
 import com.kunlanw.design.until.Constant;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.utils.Convert;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -93,6 +101,14 @@ public  class FundService implements IFundService{
        }catch (Exception e){
            throw new Exception("获取项目实时金额失败");
        }
+    }
+
+    @Override
+    public BigDecimal getWalletAmount(String address) throws Exception {
+        Web3j web3j=Web3j.build(new HttpService());
+        EthGetBalance balance=web3j.ethGetBalance(address,DefaultBlockParameterName.LATEST).send();
+        BigDecimal amount=Convert.fromWei(balance.getBalance().toString(),Convert.Unit.ETHER);
+        return amount;
     }
 
 

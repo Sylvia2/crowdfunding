@@ -1,10 +1,7 @@
 package com.kunlanw.design.service;
 
 import com.kunlanw.design.domain.Project;
-import com.kunlanw.design.model.ContractProject;
-import com.kunlanw.design.model.FundEntity;
-import com.kunlanw.design.model.ProjectEntity;
-import com.kunlanw.design.model.ProjectFilter;
+import com.kunlanw.design.model.*;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -24,13 +21,13 @@ public interface IProjectService {
      *
      * @param entity
      */
-    boolean createProject(Project entity) throws Exception;
+    boolean createProject(ProjectEdit entity,int userid) throws Exception;
 
-    List<Project> getAll() throws Exception;
+    List<ProjectEntity> getAll() throws Exception;
 
-    List<Project> getByFilter(ProjectFilter filter) throws Exception;
+    List<ProjectEntity> getByFilter(ProjectFilter filter) throws Exception;
 
-    Project updateProject(int id, Project project) throws Exception;
+    Project updateProject(int id, ProjectEdit project) throws Exception;
 
     Project auditProject(int id) throws Exception;
 
@@ -39,5 +36,8 @@ public interface IProjectService {
     ContractProject getProjectOnContract(int id)throws Exception;
 
 
+    List<ProjectEntity> getCreatedProject(int userid)throws Exception;
+
+    ProjectEntity domain2model(Project project);
 
 }

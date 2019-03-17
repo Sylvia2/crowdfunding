@@ -10,31 +10,29 @@ public class HomeController {
 
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public String login(){
-        return "crowdfunding/login";
+        return "login";
     }
 
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String index(){
-        return "crowdfunding/index";
+        return "index";
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.GET)
     public String register(){
-        return "crowdfunding/register";
+        return "register";
     }
 
-    @RequestMapping(value = "/project",method = RequestMethod.GET)
-    public String project(){
-        return "crowdfunding/project";
-    }
 
     @RequestMapping(value = "/manage",method = RequestMethod.GET)
     public String manage(){
-        return "crowdfunding/manage";
+        return "manage";
     }
 
     @RequestMapping(value = "/data",method = RequestMethod.GET)
     public String data(){
         return "data";
     }
+
+
 }

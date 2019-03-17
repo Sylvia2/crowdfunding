@@ -19,6 +19,14 @@
     from log
     where logID = #{logid,jdbcType=INTEGER}
   </select>
+<select id="getByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  select
+  projectID
+  from log
+  where userID=#{userid,jdbcType=INTEGER}
+  group by projectID
+</select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from log
     where logID = #{logid,jdbcType=INTEGER}
