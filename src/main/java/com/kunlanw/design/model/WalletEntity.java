@@ -9,4 +9,5 @@ public class WalletEntity {
     private int id;
     private String address;
     private BigDecimal amount;
+    private int userid;
 }

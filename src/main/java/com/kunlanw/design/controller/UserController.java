@@ -1,8 +1,10 @@
 package com.kunlanw.design.controller;
 
 import com.kunlanw.design.domain.User;
+import com.kunlanw.design.model.LogEntity;
 import com.kunlanw.design.model.LoginEntity;
 import com.kunlanw.design.model.UserEntity;
+import com.kunlanw.design.service.ILoggerService;
 import com.kunlanw.design.service.IUserService;
 import com.kunlanw.design.until.Constant;
 import com.kunlanw.design.until.ResponseResult;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 
 @Controller
@@ -20,6 +23,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ILoggerService loggerService;
 
     /**
      * 用户注册
@@ -118,6 +123,22 @@ public class UserController {
         }catch (Exception e){
             return "common/404";
         }
+    }
+
+    @RequestMapping(value = "/logDetails",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult getLogDetails(HttpSession session){
+        ResponseResult result=new ResponseResult();
+        result.setCode(0);
+        try{
+            int userid=(Integer)session.getAttribute(Constant.User_Session);
+            List<LogEntity> res=this.loggerService.getLogsByUserid(userid);
+            result.setResult(res);
+        }catch (Exception e){
+            result.setCode(-1);
+            result.setMessage(e.getMessage());
+        }
+        return  result;
     }
 
 

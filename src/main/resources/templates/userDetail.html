@@ -41,12 +41,12 @@
                     </el-menu-item>
                     <el-menu-item index="2">
                         <i class="el-icon-setting"></i>
-                        <a href="/manage" target="_blank"
+                        <a href="/manage" target="_parent"
                            style="text-decoration:none; color: rgb(255, 255, 255)">管理我的众筹</a>
                     </el-menu-item>
                     <el-menu-item index="3">
                         <i class="el-icon-document"></i>
-                        <a href="/data" target="_blank"
+                        <a href="/data" target="_parent"
                            style="text-decoration:none; color: rgb(255, 255, 255)">平台数据分析</a>
                     </el-menu-item>
                     <el-menu-item index="4">
@@ -61,7 +61,7 @@
                     <el-col :span="4" justify="center"></el-col>
                     <el-col :span="16" justify="center">
                         <el-card shadow="hover">
-                            <el-button type="primary" @click="edit()" icon="el-icon-edit" circle></el-button>
+                            <el-button type="primary" @click="edit()" icon="el-icon-edit">编辑</el-button>
                             <el-dialog title="编辑个人信息" :visible.sync="dialogFormVisible">
                                 <el-form :model="userForm">
                                     <el-form-item label="用户昵称" :label-width="formLabelWidth">
@@ -70,9 +70,9 @@
                                     <el-form-item label="用户邮箱" :label-width="formLabelWidth">
                                         <el-input v-model="userForm.email" autocomplete="off"></el-input>
                                     </el-form-item>
-                                    <el-form-item label="性别 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" :label-width="formLabelWidth">
+                                    <el-form-item label="性别  " :label-width="formLabelWidth">
                                         <el-select v-model="userForm.sex" placeholder="性别">
-                                            <el-option lable="请选择" value="null"></el-option>
+                                            <el-option label="请选择" value="0"></el-option>
                                             <el-option label="女" value="1"></el-option>
                                             <el-option label="男" value="2"></el-option>
                                         </el-select>
@@ -108,16 +108,64 @@
                                                     <span>钱包</span>
                                                 </template>
                                                 <el-table :data="wallets">
+                                                    <el-table-column prop="id" label="钱包ID"
+                                                                     width="100px"></el-table-column>
                                                     <el-table-column prop="address" label="钱包地址"
                                                                      width="400px"></el-table-column>
                                                     <el-table-column prop="amount" label="钱包余额"
                                                                      width="100px"></el-table-column>
                                                 </el-table>
+                                                <el-button type="primary" @click="add()" icon="el-icon-edit">新增钱包
+                                                </el-button>
+                                                <el-dialog title="新增钱包地址" :visible.sync="dialogWalletFormVisible">
+                                                    <el-form :model="walletForm">
+                                                        <el-form-item label="钱包地址" :label-width="formLabelWidth">
+                                                            <el-input v-model="walletForm.address"
+                                                                      autocomplete="off"></el-input>
+                                                        </el-form-item>
+                                                    </el-form>
+                                                    <div slot="footer" class="dialog-footer">
+                                                        <el-button @click="dialogWalletFormVisible = false">取 消
+                                                        </el-button>
+                                                        <el-button type="primary" @click="addWallet()">确 定</el-button>
+                                                    </div>
+                                                </el-dialog>
                                             </el-collapse-item>
                                         </el-collapse>
                                     </td>
                                 </tr>
                             </table>
+                        </el-card>
+                        <br/>
+                        <br/>
+                        <el-card shadow="hover">
+                            <el-collapse accordion>
+                                <el-collapse-item>
+                                    <template slot="title">
+                                        <span>点击查看交易记录</span>
+                                    </template>
+                                    <el-table :data="logs">
+                                        <el-table-column prop="logId" label="交易号"
+                                                         width="100px"></el-table-column>
+                                        <el-table-column prop="projectName" label="项目名称"
+                                                         width="120px"></el-table-column>
+                                        <el-table-column prop="amount" label="涉及金额(Eth)"
+                                                         width="130px"></el-table-column>
+                                        <el-table-column prop="fromAddress" label="钱包ID"
+                                                         width="100px"></el-table-column>
+                                        <el-table-column prop="date" label="交易时间"
+                                                         width="200px"></el-table-column>
+                                    </el-table>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </el-card>
+                        <br/>
+                        <br/>
+                        <el-card shadow="hover">
+
+                                    <div id="amountData" style="width:100%;height:300px;">
+                                    </div>
+                            </el-collapse>
                         </el-card>
                     </el-col>
                     <el-col :span="4" justify="center"></el-col>
@@ -134,6 +182,8 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.js"></script>
+<script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
 <script th:inline="javascript">
     var app = new Vue({
         el: "#app",
@@ -142,16 +192,22 @@
                 wallets: [],
                 userForm: {
                     /*<![CDATA[*/
-                    name :/*[[${details.name}]]*/ '',
-                    email :/*[[${details.email}]]*/ '',
+                    name: /*[[${details.name}]]*/ '',
+                    email: /*[[${details.email}]]*/ '',
                     /*]]>*/
-                    sex :null
+                    sex: 0
                 },
-                dialogFormVisible:false
+                dialogFormVisible: false,
+                dialogWalletFormVisible: false,
+                walletForm: {
+                    address: ''
+                },
+                logs:[]
             }
         },
         created: function () {
             this.getWallets();
+            this.getLogs();
         },
         methods: {
             handleOpen(key, keyPath) {
@@ -172,25 +228,124 @@
                     alert(error);
                 })
             },
-            updateUser(){
+            updateUser() {
                 axios.post('/user/update',
-                this.userForm
-                ).then((response)=>{
-                    if(response.data.code<0){
+                    this.userForm
+                ).then((response) => {
+                    if (response.data.code < 0) {
                         alert(response.data.message);
-                    }else{
-                        window.location.href="/user/userDetail";
+                    } else {
+                        window.location.href = "/user/userDetail";
                     }
-                }).catch((error)=>{
+                }).catch((error) => {
                     alert(error);
                 })
 
             },
-            edit(){
-                this.dialogFormVisible=true;
+            edit() {
+                this.dialogFormVisible = true;
+            },
+            add() {
+                this.dialogWalletFormVisible = true;
+            },
+            addWallet() {
+                axios.post('/wallet/createWallet',
+                    this.walletForm).then((response) => {
+                    if (response.data.code < 0) {
+                        alert(response.data.message);
+                    } else {
+                        window.location.href = "/user/userDetail";
+                    }
+                }).catch((error) => {
+                    alert(error);
+                })
+            },
+            getLogs(){
+                axios.get('/user/logDetails',{}
+                ).then((response)=>{
+                    if (response.data.code < 0) {
+                        alert(response.data.message);
+                    } else {
+                        this.logs = response.data.result;
+                    }
+                }).catch((error) => {
+                    alert(error);
+                })
             }
 
         }
-    })
+    });
+
+    // 基于准备好的dom，初始化echarts实例
+    var TypeChart = echarts.init(document.getElementById('amountData'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '金额统计',
+            left: 'center',
+            top: 20
+        },
+
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+        visualMap: {
+            show: false,
+            min: 80,
+            max: 600,
+            inRange: {
+                colorLightness: [0, 1]
+            }
+        },
+        series : [
+            {
+                name:'金额',
+                type:'pie',
+                radius : '55%',
+                center: ['50%', '50%'],
+                data:[
+                    {value:335, name:'创业启动资金'},
+                    {value:310, name:'慈善机构募捐'},
+                    {value:274, name:'个人慈善募捐'},
+                    {value:235, name:'待定1'},
+                    {value:400, name:'待定2'}
+                ].sort(function (a, b) { return a.value - b.value; }),
+                roseType: 'radius',
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgb(0, 0, 0)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgb(0, 0, 0)'
+                        },
+                        smooth: 0.2,
+                        length: 10,
+                        length2: 20
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    TypeChart.setOption(option);
 </script>
 </html>

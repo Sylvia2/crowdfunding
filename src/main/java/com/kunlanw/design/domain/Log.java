@@ -19,6 +19,16 @@ public class Log implements Serializable {
 
     private Long amount;
 
+    private Integer walletid;
+
+    public Integer getWalletid() {
+        return walletid;
+    }
+
+    public void setWalletid(Integer walletid) {
+        this.walletid = walletid;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public Integer getLogid() {

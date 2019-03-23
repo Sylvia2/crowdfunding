@@ -5,6 +5,7 @@ import com.kunlanw.design.model.WalletEntity;
 import com.kunlanw.design.service.IWalletService;
 import com.kunlanw.design.until.Constant;
 import com.kunlanw.design.until.ResponseResult;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,16 +25,18 @@ public class WalletController {
      * @return
      */
     @RequestMapping(value = "/createWallet",method = RequestMethod.POST)
-    public ResponseResult createWallet(@RequestBody Wallet wallet){
+    public ResponseResult createWallet(@RequestBody WalletEntity wallet,HttpSession session){
         ResponseResult  result=new ResponseResult();
         result.setCode(0);
         try{
+            int userid=(Integer)session.getAttribute(Constant.User_Session);
+            wallet.setUserid(userid);
             boolean res=this.walletService.createWallet(wallet);
             result.setResult(res);
             result.setMessage("successful");
         }catch (Exception e){
             result.setCode(-1);
-            result.setMessage(e.getMessage());
+            result.setMessage("新增钱包地址失败");
         }
         return result;
     }

@@ -26,48 +26,54 @@ public class WalletSereviceImpl implements IWalletService {
     private IFundService fundService;
 
     @Override
-    public boolean createWallet(Wallet wallet) {
-        try{
-            List<Wallet> wallets=this.walletMapper.findByUserID(wallet.getUserid());
-            List<Wallet> list=wallets.stream().filter(p->p.getAddress()==wallet.getAddress()).collect(Collectors.toList());
-            if(list!=null){
-                throw new Exception("该钱包地址已存在");
+    public boolean createWallet(WalletEntity wallet) {
+        try {
+            List<Wallet> wallets = this.walletMapper.findByUserID(wallet.getUserid());
+            if (wallets != null && !wallets.isEmpty()) {
+                List<Wallet> list = wallets.stream().filter(p -> p.getAddress().equalsIgnoreCase(wallet.getAddress())).collect(Collectors.toList());
+                if (list.size() > 0) {
+                    throw new Exception("该钱包地址已存在");
+                }
             }
-            wallet.setDatachangeCreatetime(new Date());
-            wallet.setDatachangeLasttime(new Date());
-            this.walletMapper.insertSelective(wallet);
+
+            Wallet temp = new Wallet();
+            temp.setUserid(wallet.getUserid());
+            temp.setAddress(wallet.getAddress());
+            temp.setDatachangeLasttime(new Date());
+            temp.setDatachangeCreatetime(new Date());
+            this.walletMapper.insertSelective(temp);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     @Override
     public List<WalletEntity> getWalletByUserId(int userId) throws Exception {
-        try{
-            List<WalletEntity> res=new ArrayList<>();
-            List<Wallet> wallets=this.walletMapper.findByUserID(userId);
-            if(wallets!=null&& !wallets.isEmpty()){
-                for(Wallet item:wallets){
-                    WalletEntity entity=new WalletEntity();
+        try {
+            List<WalletEntity> res = new ArrayList<>();
+            List<Wallet> wallets = this.walletMapper.findByUserID(userId);
+            if (wallets != null && !wallets.isEmpty()) {
+                for (Wallet item : wallets) {
+                    WalletEntity entity = new WalletEntity();
                     entity.setAddress(item.getAddress());
                     entity.setId(item.getWalletid());
-                    entity.setAmount(this.fundService.getWalletAmount(item.getAddress())==null?BigDecimal.ZERO:this.fundService.getWalletAmount(item.getAddress()));
+                    entity.setAmount(this.fundService.getWalletAmount(item.getAddress()) == null ? BigDecimal.ZERO : this.fundService.getWalletAmount(item.getAddress()));
                     res.add(entity);
                 }
             }
             return res;
-        }catch (Exception e ){
+        } catch (Exception e) {
             throw new Exception("获取用户的钱包地址失败");
         }
     }
 
     @Override
     public boolean deleteWalletById(int walletId) throws Exception {
-        try{
+        try {
             this.walletMapper.deleteByPrimaryKey(walletId);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

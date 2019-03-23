@@ -20,4 +20,6 @@ public interface LogMapper {
     int updateByPrimaryKey(Log record);
 
     List<Integer> getByUserid(int userid);
+
+    List<Log> getLogsByUserid(int userid);
 }

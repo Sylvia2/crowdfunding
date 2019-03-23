@@ -12,7 +12,7 @@ public interface IWalletService {
      * @param wallet
      * @return
      */
-    boolean createWallet(Wallet wallet);
+    boolean createWallet(WalletEntity wallet);
 
     /**
      * 用户获取自己的钱包

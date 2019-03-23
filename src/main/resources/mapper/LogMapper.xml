@@ -6,12 +6,13 @@
     <id column="logID" jdbcType="INTEGER" property="logid" />
     <result column="userID" jdbcType="INTEGER" property="userid" />
     <result column="projectID" jdbcType="INTEGER" property="projectid" />
+    <result column="walletID" jdbcType="INTEGER" property="walletid" />
     <result column="datachange_createtime" jdbcType="TIMESTAMP" property="datachangeCreatetime" />
     <result column="datachange_lasttime" jdbcType="TIMESTAMP" property="datachangeLasttime" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
   </resultMap>
   <sql id="Base_Column_List">
-    logID, userID, projectID, datachange_createtime, datachange_lasttime, amount
+    logID, userID, projectID, datachange_createtime, datachange_lasttime, amount,walletID
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -26,6 +27,12 @@
   where userID=#{userid,jdbcType=INTEGER}
   group by projectID
 </select>
+  <select id="getLogsByUserid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from log
+    where userID = #{userid,jdbcType=INTEGER}
+  </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from log
