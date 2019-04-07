@@ -73,9 +73,8 @@ public class ProjectServiceImpl implements IProjectService {
             //数据库备份
             this.projectMapper.insertSelective(project);
             //上链
-//            Wallet wallet = this.walletMapper.selectByPrimaryKey(entity.getWalletAddress());
-//            return this.fundService.createProject(entity.getAmount().toBigInteger(), wallet.getAddress());
-            res=true;
+            Wallet wallet = this.walletMapper.selectByPrimaryKey(entity.getWalletAddress());
+            res= this.fundService.createProject(entity.getAmount().toBigInteger(), wallet.getAddress());
         } catch (Exception e) {
 //            throw new Exception("创建项目失败");
             res=false;
@@ -169,24 +168,25 @@ public class ProjectServiceImpl implements IProjectService {
 
     /**
      * 参与众筹，更新log表，与合约交互
-     *
-     * @param id
      * @param entity
      * @return
      * @throws Exception
      */
     @Override
-    public boolean fundProject(int id, FundEntity entity) throws Exception {
+    public boolean fundProject(FundEntity entity) throws Exception {
         try {
             Log log = new Log();
             log.setAmount(entity.getAmount().longValue());
-            log.setProjectid(id);
+            log.setProjectid(entity.getProjectId());
             log.setUserid(entity.getUserID());
             log.setDatachangeCreatetime(new Date());
             log.setDatachangeLasttime(new Date());
+            log.setWalletid(entity.getFromID());
             this.logMapper.insertSelective(log);
+            Wallet wallet=this.walletMapper.selectByPrimaryKey(entity.getFromID());
+            entity.setAddress_from(wallet.getAddress());
             //与合约交互
-            boolean res = this.fundService.fund(entity.getAddress_to(), entity.getAddress_from(), entity.getAmount());
+            boolean res = this.fundService.fund(entity.getAddress_to(),entity.getAddress_from(), entity.getKey(), entity.getAmount().toBigInteger());
             return res;
         } catch (Exception e) {
             throw new Exception("参与众筹失败" + e.getMessage());

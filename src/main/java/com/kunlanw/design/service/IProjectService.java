@@ -31,7 +31,7 @@ public interface IProjectService {
 
     Project auditProject(int id) throws Exception;
 
-    boolean fundProject(int id, FundEntity entity)throws Exception;
+    boolean fundProject(FundEntity entity)throws Exception;
 
     ContractProject getProjectOnContract(int id)throws Exception;
 

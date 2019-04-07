@@ -14,7 +14,7 @@ public interface IFundService {
 
     boolean createProject(BigInteger amount, String address_to);
 
-    boolean fund(String address_to,String address_from,BigInteger amount);
+    boolean fund(String address_to,String address_from,String key,BigInteger amount);
 
     ContractProject getProjectOnContract(String address) throws Exception;
 

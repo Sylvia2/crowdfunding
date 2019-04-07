@@ -18,14 +18,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <title>项目详情页</title>
-    <!--<style>-->
-        <!--.el-header, .el-footer {-->
-            <!--background-color: #409EFF;-->
-            <!--color: white;-->
-            <!--text-align: center;-->
-            <!--line-height: 60px;-->
-        <!--}-->
-    <!--</style>-->
 </head>
 <body>
 <div id="app">
@@ -33,13 +25,45 @@
         <el-header>众筹项目详情页</el-header>
         <el-main>
             <el-row type="flex">
-                <el-col :span="2">
+                <el-col :span="4">
                 </el-col>
-                <el-col :span="10" justify="center">
+                <el-col :span="16" justify="center">
                     <el-card shadow="hover">
+                        <el-button type="primary" @click="fundProject" :disabled="isDisabled">参与众筹</el-button>
+                        <el-dialog title="参与众筹" :visible.sync="dialogFormVisible">
+                            <el-form :model="fundForm">
+                                <el-form-item prop="fromID" label="投资账户" :rules="[
+                                                 { required: true, message: '不能为空', trigger: 'blur' },
+                                                ]">
+
+                                        <el-select v-model="fundForm.fromID" placeholder="请选择">
+                                            <el-option
+                                                    v-for="item in wallet"
+                                                    :key="item.id"
+                                                    :label="item.address"
+                                                    :value="item.id">
+                                            </el-option>
+                                        </el-select>
+                                </el-form-item>
+                                <el-form-item prop="amount" label="金额" :rules="[
+                                                 { required: true, message: '不能为空', trigger: 'blur' },
+                                                ]">
+                                        <el-input placeholder="请输入金额" v-model="fundForm.amount"></el-input>
+                                </el-form-item>
+                                <el-form-item prop="amount" label="支付密码" :rules="[
+                                                 { required: true, message: '不能为空', trigger: 'blur' },
+                                                ]">
+                                        <el-input placeholder="请输入私钥密码完成众筹" v-model="fundForm.key"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                <el-button type="primary" @click="fund">确 定</el-button>
+                            </div>
+                        </el-dialog>
                         <table class="table">
                             <tr>
-                                <td width="100px"><b>项目ID：</b></td>
+                                <td width="150px"><b>项目ID：</b></td>
                                 <td th:text="${projectDetail.projectid}"></td>
                             </tr>
                             <tr>
@@ -67,11 +91,11 @@
                                 <td th:text="${projectDetail.type}"></td>
                             </tr>
                             <tr>
-                                <td><b>截止时间</b></td>
+                                <td><b>截止时间：</b></td>
                                 <td th:text="${projectDetail.dateName}"></td>
                             </tr>
                             <tr>
-                                <td></td>
+                                <td><b>项目状态：</b></td>
                                 <td>
                                     <br>
                                     <el-steps :space="200" :active="stepActive" finish-status="success">
@@ -80,52 +104,35 @@
                                         <el-step title="完成"></el-step>
                                     </el-steps></td>
                             </tr>
+                            <tr>
+                                <td><b>项目实时金额：</b></td>
+                                <td>
+                                    <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage"></el-progress>
+                                    <br>
+                                    <el-tag type="danger" size="medium">&nbsp;&nbsp; {{realAmount}} Ether &nbsp;&nbsp;</el-tag>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>项目参与人次：</b></td>
+                                <td>
+                                    <el-tag type="success" size="medium">&nbsp;&nbsp; {{paidNums}} Person &nbsp;&nbsp;</el-tag>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>人均贡献：</b></td>
+                                <td>
+                                    <el-tag type="warning" size="medium">&nbsp;&nbsp; {{average}} Ether &nbsp;&nbsp;</el-tag>
+                                </td>
+                            </tr>
                         </table>
-                        <br>
-                        <br>
-
                     </el-card>
                 </el-col>
-                <el-col :span=1>
 
+                <el-col :span="4">
                 </el-col>
-                <el-col :span="10" justify="center">
-                    <el-card shadow="hover">
-                        <!--<div id="realTimeAmount" style="width:100%;height:300px;">-->
-                        <!--</div>-->
-                        <div>
-                            <el-progress type="circle" :percentage="realAmount"></el-progress>
-                        </div>
-                        <div>
-                            <el-form :model="fundForm" label-width="80px">
-                                <el-form-item prop="toID" label="资金流向">
-                                    <el-col :span="15">
-                                        <el-input v-model="fundForm.toID"  :disabled="true"></el-input>
-                                    </el-col>
-                                </el-form-item>
-                                <el-form-item prop="fromID" label="投资账户" :rules="[
-                                                 { required: true, message: '不能为空', trigger: 'blur' },
-                                                ]">
-                                    <el-col :span="15">
-                                        <el-input placeholder="请输入钱包" v-model="fundForm.fromID"></el-input>
-                                    </el-col>
-                                </el-form-item>
-                                <el-form-item prop="amount" label="金额" :rules="[
-                                                 { required: true, message: '不能为空', trigger: 'blur' },
-                                                ]">
-                                    <el-col :span="15">
-                                        <el-input placeholder="请输入金额" v-model="fundForm.amount"></el-input>
-                                    </el-col>
-                                </el-form-item>
-                                <el-form-item>
-                                    <el-col :span="15">
-                                        <el-button type="primary" @click="fund">参与众筹</el-button>
-                                    </el-col>
-                                </el-form-item>
-                            </el-form>
-                        </div>
-                    </el-card>
-                </el-col>
+
+
             </el-row>
         </el-main>
     </el-container>
@@ -147,52 +154,90 @@
                 /*<![CDATA[*/
                 stepActive :/*[[${projectDetail.status}+1]]*/ 1,
             /*]]>*/
-                realAmount:20,
+                realAmount:0,
+                percentage:0,
                 fundForm:{
                     fromID:'',
                     /*<![CDATA[*/
                     toID :/*[[${projectDetail.walletAddress}]]*/ '',
                     /*]]>*/
-                    amount:null
-                }
+                    amount:null,
+                    key:''
+                },
+                dialogFormVisible : false,
+                wallet:[],
+                /*<![CDATA[*/
+                projectId :/*[[${projectDetail.projectid}]]*/ 0,
+                /*]]>*/
+                paidNums:0,
+                average:0,
+                isDisabled:true
+
             }
         },
         created: function () {
+            this.getWallets();
+            this.getProjectOnContract();
+            this.showFund();
         },
         methods:{
             fund(){
-                axios({
-
+                axios.post('/project/fundProject',{
+                    'projectId':this.projectId,
+                    'fromID':this.fundForm.fromID,
+                    'amount':this.fundForm.amount,
+                    'address_to':this.fundForm.toID,
+                    "key":this.fundForm.key
                 }).then((response)=>{
-
+                    if(response.data.code<0){
+                        alert(response.data.message);
+                    }else{
+                        window.location.href="/project/getById/"+this.projectId;
+                    }
                 }).catch((error)=>{
-
+                    alert(error);
                 })
             },
-            getProjectOnBlock(){
+            getWallets(){
+                axios.get('/wallet/getWalletByUserId',
+                    {
 
+                    }
+                ).then((response)=>{
+                    if(response.data.code<0){
+                        alert(response.data.message);
+                    }else{
+                        this.wallet=response.data.result;
+                    }
+                }).catch((error)=>{
+                    alert(error);
+                })
+            },
+            getProjectOnContract(){
+                axios.get('/project/getProjectOnContract/'+this.projectId,
+                    {}).then((response)=>{
+                    if(response.data.code<0){
+                        alert(response.data.message);
+                    }else{
+                        this.percentage=response.data.result.realtimeAmount*100/response.data.result.successAmount;
+                        this.paidNums=response.data.result.paidNum;
+                        this.average=response.data.result.realtimeAmount/response.data.result.paidNum;
+                        this.realAmount=response.data.result.realtimeAmount;
+                    }
+                }).catch((error)=>{
+                    alert(error);
+                })
+            },
+            showFund(){
+                if(this.stepActive===2) {
+                    this.isDisabled=false;
+                }
+            },
+            fundProject(){
+                this.dialogFormVisible = true;
             }
+
         }
     });
-    // let AmountChart=echarts.init(document.getElementById('realTimeAmount'));
-    // let  option = {
-    //     title:{
-    //         text: '项目实时金额',
-    //         left: 'center',
-    //         top: 20
-    //     },
-    //     xAxis: {
-    //         type: 'category',
-    //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    //     },
-    //     yAxis: {
-    //         type: 'value'
-    //     },
-    //     series: [{
-    //         data: [820, 932, 901, 934, 1290, 1330, 1320],
-    //         type: 'line'
-    //     }]
-    // };
-    // AmountChart.setOption(option);
 </script>
 </html>

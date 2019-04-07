@@ -67,6 +67,9 @@
       <if test="amount != null">
         amount,
       </if>
+      <if test="walletid != null">
+        walletid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="logid != null">
@@ -86,6 +89,9 @@
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="walletid != null">
+        #{walletid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

@@ -67,12 +67,14 @@
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    <
+    script
+    src = "https://unpkg.com/axios/dist/axios.min.js" ></script>
 <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.js"></script>
 <script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
 <script>
-    var app = new Vue({
+    let app = new Vue({
         el: "#app",
         data: function () {
             return {}
@@ -89,10 +91,8 @@
 
 
     // 基于准备好的dom，初始化echarts实例
-    var TypeChart = echarts.init(document.getElementById('type'));
-
-    // 指定图表的配置项和数据
-    var option = {
+    let TypeChart = echarts.init(document.getElementById('type'));
+    TypeChart.setOption({
         title: {
             text: '众筹项目类别占比',
             left: 'center',
@@ -158,45 +158,37 @@
                 }
             }
         ]
-    };
-    // 使用刚指定的配置项和数据显示图表。
-    TypeChart.setOption(option);
+    });
 
     let StatusChart = echarts.init(document.getElementById('status'));
-    let StatusOption = {
+    StatusChart.setOption({
         title: {
-            text: '众筹项目状态占比',
-            left: 'center',
-            top: 20
+            text: '众筹项目状态占比'
+        },
+        tooltip: {},
+        legend: {
+            data: ['状态']
         },
         xAxis: {
-            data: ['待审核', '进行中', '成功', '失败'],
-            axisTick: {show: false},
-            axisLabel: {}
+            data: []
         },
-        yAxis: {
-            splitLine: {show: false}
-        },
-        animationDurationUpdate: 1200,
+        yAxis: {},
         series: [{
+            name: '状态',
             type: 'bar',
-            itemStyle: {
-                normal: {
-                    color: '#ddd'
-                }
-            }
-        },
-            {
-                type: 'bar',
-                barWidth: 50,
-                z: 10,
-                data: [20, 33, 13, 5],
-                itemStyle: {
-                    color: '#F56C6C'
-                }
-            }]
-    };
-
-    StatusChart.setOption(StatusOption);
+            data: []
+        }]
+    });
+    //获取状态数据
+    $.get('/project/getProjectsByStatus', function (data) {
+        if(data.code===0){
+            let title=["待审核","进行中","成功","失败"];
+            let status=[];
+            status[0]=data.result.prototype.get(0);
+            status[1]=data.result.prototype.get(1);
+            status[2]=data.result.prototype.get(2);
+            status[3]=data.result.prototype.get(3);
+        }
+    })
 </script>
 </html>
