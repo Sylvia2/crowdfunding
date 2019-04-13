@@ -44,22 +44,36 @@
             </el-aside>
             <el-main>
                 <el-row type="flex">
-                    <el-col :span="12" justify="center">
-                        <el-card shadow="hover">
-                            <div id="type" style="width:100%;height:300px;">
-                            </div>
-                        </el-card>
+                    <el-col :span="4" justify="center">
                     </el-col>
                     <el-col :span="12" justify="center">
                         <el-card shadow="hover">
-                            <div id="status" style="width:100%;height:300px;">
+                            <b>众筹项目状态占比</b>
+                            <div id="mountNode" style="width:auto;height:auto;">
                             </div>
                         </el-card>
+                    </el-col>
+                    <el-col :span="4" justify="center">
+                    </el-col>
+                </el-row>
+               <br/>
+                <el-row type="flex">
+                    <el-col :span="4" justify="center">
+                    </el-col>
+                    <el-col :span="12" justify="center">
+                        <el-card shadow="hover">
+                            <b>众筹项目类别占比</b>
+                            <div id="typeNode" style="width:auto;height:auto;">
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="4" justify="center">
                     </el-col>
                 </el-row>
             </el-main>
         </el-container>
     </el-container>
+
 
 </div>
 </body>
@@ -67,17 +81,24 @@
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
-    <
-    script
-    src = "https://unpkg.com/axios/dist/axios.min.js" ></script>
-<script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.js"></script>
-<script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
 <script>
+
+
     let app = new Vue({
         el: "#app",
         data: function () {
-            return {}
+            return {
+                allNum:200,
+                statusDataSet:null,
+                typeDataSet:[]
+            }
+        },
+        created: function () {
+            this.getStatus()
         },
         methods: {
             handleOpen(key, keyPath) {
@@ -85,110 +106,115 @@
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
-            }
+            },
+           getStatus(){
+               axios.get('/project/getProjectsByStatus',{}
+               ).then((response)=>{
+                   if(response.data.code<0){
+                       alert(response.data.message);
+                   }else{
+                       this.statusDataSet=response.data.result;
+                       let chart = new G2.Chart({
+                           container: 'mountNode',
+                           forceFit: true,
+                           height:400,
+                           // height: window.innerHeight
+                       });
+                       chart.source(this.statusDataSet);
+                       chart.scale('status', {
+                           tickInterval: 10
+                       });
+                       chart.interval().position('status*num').color('status', ['#daf0fd', '#fec514', '#db4c3c', '#7f8da9']);
+                       chart.render();
+                       alert(this.statusDataSet);
+                   }
+               }).catch((error)=>{
+                   alert(error);
+               })
+           }
         }
     });
 
+    let data = [{
+        status: '审核中',
+        num: 30
+    }, {
+        status: '进行中',
+        num: 52
+    }, {
+        status: '成功',
+        num: 61
+    }, {
+        status: '失败',
+        num: 145
+    }];
+    // let chart = new G2.Chart({
+    //     container: 'mountNode',
+    //     forceFit: true,
+    //     height:400,
+    //     // height: window.innerHeight
+    // });
+    // chart.source(app.statusDataSet);
+    // chart.scale('status', {
+    //     tickInterval: 10
+    // });
+    // chart.interval().position('status*num').color('status', ['#daf0fd', '#fec514', '#db4c3c', '#7f8da9']);
+    // chart.render();
 
-    // 基于准备好的dom，初始化echarts实例
-    let TypeChart = echarts.init(document.getElementById('type'));
-    TypeChart.setOption({
-        title: {
-            text: '众筹项目类别占比',
-            left: 'center',
-            top: 20
-        },
-
-        tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-
-        visualMap: {
-            show: false,
-            min: 80,
-            max: 600,
-            inRange: {
-                colorLightness: [0, 1]
-            }
-        },
-        series: [
-            {
-                name: '项目类别',
-                type: 'pie',
-                radius: '55%',
-                center: ['50%', '50%'],
-                data: [
-                    {value: 335, name: '创业启动资金'},
-                    {value: 310, name: '慈善机构募捐'},
-                    {value: 274, name: '个人慈善募捐'},
-                    {value: 235, name: '待定1'},
-                    {value: 400, name: '待定2'}
-                ].sort(function (a, b) {
-                    return a.value - b.value;
-                }),
-                roseType: 'radius',
-                label: {
-                    normal: {
-                        textStyle: {
-                            color: 'rgb(0, 0, 0)'
-                        }
-                    }
-                },
-                labelLine: {
-                    normal: {
-                        lineStyle: {
-                            color: 'rgb(0, 0, 0)'
-                        },
-                        smooth: 0.2,
-                        length: 10,
-                        length2: 20
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        shadowBlur: 200,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                },
-                animationType: 'scale',
-                animationEasing: 'elasticOut',
-                animationDelay: function (idx) {
-                    return Math.random() * 200;
-                }
-            }
-        ]
+    let typeData = [{
+        item: '创业',
+        count: 40,
+        percent:0.4
+    }, {
+        item: '扶贫',
+        count: 21,
+        percent:0.21
+    }, {
+        item: '人道救援',
+        count: 17,
+        percent:0.17
+    }, {
+        item: '环境保护',
+        count: 13,
+        percent:0.13
+    }, {
+        item: '动物保护',
+        count: 9,
+        percent:0.09
+    }];
+    let TypeChart = new G2.Chart({
+        container: 'typeNode',
+        forceFit: true,
+        height: 400,
+        animate: false
     });
-
-    let StatusChart = echarts.init(document.getElementById('status'));
-    StatusChart.setOption({
-        title: {
-            text: '众筹项目状态占比'
-        },
-        tooltip: {},
-        legend: {
-            data: ['状态']
-        },
-        xAxis: {
-            data: []
-        },
-        yAxis: {},
-        series: [{
-            name: '状态',
-            type: 'bar',
-            data: []
-        }]
+    TypeChart.source(typeData);
+    TypeChart.coord('theta', {
+        radius: 0.75,
+        innerRadius: 0.6
     });
-    //获取状态数据
-    $.get('/project/getProjectsByStatus', function (data) {
-        if(data.code===0){
-            let title=["待审核","进行中","成功","失败"];
-            let status=[];
-            status[0]=data.result.prototype.get(0);
-            status[1]=data.result.prototype.get(1);
-            status[2]=data.result.prototype.get(2);
-            status[3]=data.result.prototype.get(3);
+    TypeChart.tooltip({
+        showTitle: false,
+        itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+    });
+    let interval = TypeChart.intervalStack().position('percent').color('item').label('percent', {
+        formatter: function formatter(val, item) {
+            return item.point.item + ': ' + val*100+'%';
         }
-    })
+    }).tooltip('item*count', function(item, count) {
+        count = count ;
+        return {
+            name: item,
+            value: count
+        };
+    }).style({
+        lineWidth: 2,
+        stroke: '#fff'
+    });
+
+    TypeChart.render();
+    interval.setSelected(typeData[0]);
+
+
 </script>
 </html>

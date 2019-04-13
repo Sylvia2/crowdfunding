@@ -1,5 +1,6 @@
 package com.kunlanw.design.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.kunlanw.design.contract.IFundService;
 import com.kunlanw.design.domain.Project;
 import com.kunlanw.design.model.*;
@@ -7,20 +8,20 @@ import com.kunlanw.design.service.ILoggerService;
 import com.kunlanw.design.service.IProjectService;
 import com.kunlanw.design.until.Constant;
 import com.kunlanw.design.until.ResponseResult;
-import jnr.ffi.annotations.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.web3j.abi.datatypes.Int;
 
-import javax.annotation.Resource;
+
+
 import javax.servlet.http.HttpSession;
-import javax.swing.plaf.synth.Region;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 import java.util.stream.Collectors;
+
 
 
 @Controller
@@ -272,8 +273,16 @@ public class ProjectController {
         result.setCode(0);
         try {
             List<ProjectEntity> list = this.projectService.getAll();
-            Map<Short, List<ProjectEntity>> res = list.stream().collect(Collectors.groupingBy(ProjectEntity::getStatus));
-            result.setResult(res);
+            List<ViewStatus> res=new ArrayList<>();
+            int num=list.stream().filter(p->p.getStatus()==0).collect(Collectors.toList()).size();
+            res.add(new ViewStatus("审核中",num));
+            num=list.stream().filter(p->p.getStatus()==1).collect(Collectors.toList()).size();
+            res.add(new ViewStatus("进行中",num));
+            num=list.stream().filter(p->p.getStatus()==2).collect(Collectors.toList()).size();
+            res.add(new ViewStatus("成功",num));
+            num=list.stream().filter(p->p.getStatus()==3).collect(Collectors.toList()).size();
+            res.add(new ViewStatus("失败",num));
+            result.setResult(JSON.toJSONString(res));
         } catch (Exception e) {
             result.setCode(-1);
             result.setMessage(e.getMessage());
