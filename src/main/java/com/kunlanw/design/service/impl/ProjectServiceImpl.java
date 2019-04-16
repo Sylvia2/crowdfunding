@@ -258,6 +258,7 @@ public class ProjectServiceImpl implements IProjectService {
         entity.setDesc(project.getDesc());
         entity.setType(project.getType());
         entity.setUserid(project.getUserid());
+        entity.setDataCreateTime(this.formateDate(project.getDatachangeCreatetime()));
         return entity;
     }
 

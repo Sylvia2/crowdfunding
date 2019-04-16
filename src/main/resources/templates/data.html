@@ -70,6 +70,20 @@
                     <el-col :span="4" justify="center">
                     </el-col>
                 </el-row>
+                <br/>
+                <el-row type="flex">
+                    <el-col :span="4" justify="center">
+                    </el-col>
+                    <el-col :span="12" justify="center">
+                        <el-card shadow="hover">
+                            <b>众筹项目增长图</b>
+                            <div id="increaseProjectNode" style="width:auto;height:auto;">
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="4" justify="center">
+                    </el-col>
+                </el-row>
             </el-main>
         </el-container>
     </el-container>
@@ -94,11 +108,14 @@
             return {
                 allNum:200,
                 statusDataSet:null,
-                typeDataSet:[]
+                typeDataSet:null,
+                increaseDataSet:null
             }
         },
         created: function () {
-            this.getStatus()
+            this.getStatus();
+            this.getType();
+            this.getIncrease();
         },
         methods: {
             handleOpen(key, keyPath) {
@@ -126,41 +143,97 @@
                        });
                        chart.interval().position('status*num').color('status', ['#daf0fd', '#fec514', '#db4c3c', '#7f8da9']);
                        chart.render();
-                       alert(this.statusDataSet);
                    }
                }).catch((error)=>{
                    alert(error);
                })
-           }
+           },
+
+           getType(){
+                axios.get('/project/getProjectsByType',{
+
+                }).then((response)=>{
+                    if(response.data.code<0){
+                        alert(response.data.message);
+                    }else{
+                        this.typeDataSet=response.data.result;
+                        let TypeChart = new G2.Chart({
+                            container: 'typeNode',
+                            forceFit: true,
+                            height: 400,
+                            animate: false
+                        });
+                        TypeChart.source(this.typeDataSet);
+                        TypeChart.coord('theta', {
+                            radius: 0.75,
+                            innerRadius: 0.6
+                        });
+                        TypeChart.tooltip({
+                            showTitle: false,
+                            itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+                        });
+                        let interval = TypeChart.intervalStack().position('percent').color('item').label('percent', {
+                            formatter: function formatter(val, item) {
+                                return item.point.item + ': ' + val*100+'%';
+                            }
+                        }).tooltip('item*count', function(item, count) {
+                            count = count ;
+                            return {
+                                name: item,
+                                value: count
+                            };
+                        }).style({
+                            lineWidth: 2,
+                            stroke: '#fff'
+                        });
+
+                        TypeChart.render();
+                        interval.setSelected(this.typeDataSet[0]);
+                    }
+                }).catch((error)=>{
+                    alert(error);
+                })
+           },
+
+            getIncrease(){
+                axios.get('/project/getIncreaseProjects',{
+
+                }).then((response)=>{
+                    if(response.data.code<0){
+                        alert(response.data.message);
+                    }else {
+                        this.increaseDataSet=response.data.result;
+                        var chart = new G2.Chart({
+                            container: 'increaseProjectNode',
+                            forceFit: true,
+                            height: 400
+                        });
+                        chart.source(this.increaseDataSet);
+                        chart.scale('value', {
+                            min: 0
+                        });
+                        chart.scale('day', {
+                            range: [0, 1]
+                        });
+                        chart.tooltip({
+                            crosshairs: {
+                                type: 'line'
+                            }
+                        });
+                        chart.line().position('day*value');
+                        chart.point().position('day*value').size(4).shape('circle').style({
+                            stroke: '#fff',
+                            lineWidth: 1
+                        });
+                        chart.render();
+                    }
+                }).catch((error)=>{
+                    alert(error);
+                })
+
+            }
         }
     });
-
-    let data = [{
-        status: '审核中',
-        num: 30
-    }, {
-        status: '进行中',
-        num: 52
-    }, {
-        status: '成功',
-        num: 61
-    }, {
-        status: '失败',
-        num: 145
-    }];
-    // let chart = new G2.Chart({
-    //     container: 'mountNode',
-    //     forceFit: true,
-    //     height:400,
-    //     // height: window.innerHeight
-    // });
-    // chart.source(app.statusDataSet);
-    // chart.scale('status', {
-    //     tickInterval: 10
-    // });
-    // chart.interval().position('status*num').color('status', ['#daf0fd', '#fec514', '#db4c3c', '#7f8da9']);
-    // chart.render();
-
     let typeData = [{
         item: '创业',
         count: 40,
@@ -182,38 +255,38 @@
         count: 9,
         percent:0.09
     }];
-    let TypeChart = new G2.Chart({
-        container: 'typeNode',
-        forceFit: true,
-        height: 400,
-        animate: false
-    });
-    TypeChart.source(typeData);
-    TypeChart.coord('theta', {
-        radius: 0.75,
-        innerRadius: 0.6
-    });
-    TypeChart.tooltip({
-        showTitle: false,
-        itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
-    });
-    let interval = TypeChart.intervalStack().position('percent').color('item').label('percent', {
-        formatter: function formatter(val, item) {
-            return item.point.item + ': ' + val*100+'%';
-        }
-    }).tooltip('item*count', function(item, count) {
-        count = count ;
-        return {
-            name: item,
-            value: count
-        };
-    }).style({
-        lineWidth: 2,
-        stroke: '#fff'
-    });
-
-    TypeChart.render();
-    interval.setSelected(typeData[0]);
+    // let TypeChart = new G2.Chart({
+    //     container: 'typeNode',
+    //     forceFit: true,
+    //     height: 400,
+    //     animate: false
+    // });
+    // TypeChart.source(typeData);
+    // TypeChart.coord('theta', {
+    //     radius: 0.75,
+    //     innerRadius: 0.6
+    // });
+    // TypeChart.tooltip({
+    //     showTitle: false,
+    //     itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+    // });
+    // let interval = TypeChart.intervalStack().position('percent').color('item').label('percent', {
+    //     formatter: function formatter(val, item) {
+    //         return item.point.item + ': ' + val*100+'%';
+    //     }
+    // }).tooltip('item*count', function(item, count) {
+    //     count = count ;
+    //     return {
+    //         name: item,
+    //         value: count
+    //     };
+    // }).style({
+    //     lineWidth: 2,
+    //     stroke: '#fff'
+    // });
+    //
+    // TypeChart.render();
+    // interval.setSelected(typeData[0]);
 
 
 </script>

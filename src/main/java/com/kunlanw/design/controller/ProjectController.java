@@ -14,14 +14,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.RequestWrapper;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import java.util.Map;
 import java.util.stream.Collectors;
-
 
 
 @Controller
@@ -273,17 +276,132 @@ public class ProjectController {
         result.setCode(0);
         try {
             List<ProjectEntity> list = this.projectService.getAll();
-            List<ViewStatus> res=new ArrayList<>();
-            int num=list.stream().filter(p->p.getStatus()==0).collect(Collectors.toList()).size();
-            res.add(new ViewStatus("审核中",num));
-            num=list.stream().filter(p->p.getStatus()==1).collect(Collectors.toList()).size();
-            res.add(new ViewStatus("进行中",num));
-            num=list.stream().filter(p->p.getStatus()==2).collect(Collectors.toList()).size();
-            res.add(new ViewStatus("成功",num));
-            num=list.stream().filter(p->p.getStatus()==3).collect(Collectors.toList()).size();
-            res.add(new ViewStatus("失败",num));
-            result.setResult(JSON.toJSONString(res));
+            List<ViewStatus> res = new ArrayList<>();
+            if(list.size()>0){
+                for(int i=0;i<4;i++){
+                    res.add(this.getViewStatus(i,list));
+                }
+            }
+            result.setResult(res);
         } catch (Exception e) {
+            result.setCode(-1);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    private ViewStatus  getViewStatus(int i,List<ProjectEntity> list){
+        int num = list.stream().filter(p -> p.getStatus() == i).collect(Collectors.toList()).size();
+        return new ViewStatus(this.getStatus(i),num);
+    }
+
+
+    private String getStatus(int i){
+        String status="";
+        switch (i){
+            case 0:
+                status="审核中";
+                break;
+            case 1:
+                status="进行中";
+                break;
+            case 2:
+                status="成功";
+                break;
+            case 3:
+                status="失败";
+                break;
+        }
+
+        return status;
+    }
+
+
+    /**
+     * 1=创业
+     * 2=扶贫
+     * 3=环境保护
+     * 4=动物保护
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getProjectsByType", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult getProjectByType() {
+        ResponseResult result = new ResponseResult();
+        result.setCode(0);
+        try {
+            List<ProjectEntity> list = this.projectService.getAll();
+            List<ViewType> res = new ArrayList<>();
+            if (list.size() > 0) {
+                for (int i = 1; i < 5; i++) {
+                    ViewType temp=this.getViewType(i,list);
+                    if(temp==null){
+                        continue;
+                    }
+                    res.add(this.getViewType(i, list));
+                }
+            }
+            result.setResult(res);
+        } catch (Exception e) {
+            result.setCode(-1);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+    private ViewType getViewType(int i, List<ProjectEntity> list) {
+        int num = list.stream().filter(p -> p.getType() == i).collect(Collectors.toList()).size();
+        if(num==0){
+            return null;
+        }
+        return new ViewType(this.getType(i), num, this.getFormateDouble(num*1.0 / list.size()));
+    }
+
+    private String getType(int i) {
+        String type = "其他";
+        switch (i) {
+            case 1:
+                type = "创业";
+                break;
+            case 2:
+                type = "扶贫";
+                break;
+            case 3:
+                type = "环境保护";
+                break;
+            case 4:
+                type = "动物保护";
+                break;
+            case 5:
+                type = "其他";
+                break;
+        }
+        return type;
+    }
+
+    private double getFormateDouble(double old) {
+        BigDecimal db = new BigDecimal(old);
+        return db.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+
+    @RequestMapping(value = "/getIncreaseProjects",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult getIncreaseProjects(){
+        ResponseResult result=new ResponseResult();
+        result.setCode(0);
+        try{
+            List<ProjectEntity> list=this.projectService.getAll();
+            if(list.size()>0){
+                List<ViewIncrease> res=new ArrayList<>();
+                Map<String,List<ProjectEntity>> temp=list.stream().collect(Collectors.groupingBy(ProjectEntity::getDataCreateTime));
+                for (String  key : temp.keySet()) {
+                    res.add(new ViewIncrease(key.substring(5),temp.get(key).size()));
+                }
+                result.setResult(res);
+            }
+        }catch (Exception e){
             result.setCode(-1);
             result.setMessage(e.getMessage());
         }
