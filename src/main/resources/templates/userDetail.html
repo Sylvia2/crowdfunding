@@ -162,11 +162,13 @@
                         <br/>
                         <br/>
                         <el-card shadow="hover">
-
-                                    <div id="amountData" style="width:100%;height:300px;">
-                                    </div>
-                            </el-collapse>
+                            <b>资金流向分布</b>
+                            <div id="paidType" style="width:auto;height:auto;">
+                            </div>
                         </el-card>
+                    </el-col>
+                    </el-collapse>
+                    </el-card>
                     </el-col>
                     <el-col :span="4" justify="center"></el-col>
                 </el-row>
@@ -184,6 +186,9 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.js"></script>
 <script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
 <script th:inline="javascript">
     var app = new Vue({
         el: "#app",
@@ -194,20 +199,22 @@
                     /*<![CDATA[*/
                     name: /*[[${details.name}]]*/ '',
                     email: /*[[${details.email}]]*/ '',
+                    sex: /*[[${details.sex}]]*/ 0,
                     /*]]>*/
-                    sex: 0
                 },
                 dialogFormVisible: false,
                 dialogWalletFormVisible: false,
                 walletForm: {
                     address: ''
                 },
-                logs:[]
+                logs: [],
+                typeDataSet:null,
             }
         },
         created: function () {
             this.getWallets();
             this.getLogs();
+            this.getPaidType();
         },
         methods: {
             handleOpen(key, keyPath) {
@@ -260,9 +267,9 @@
                     alert(error);
                 })
             },
-            getLogs(){
-                axios.get('/user/logDetails',{}
-                ).then((response)=>{
+            getLogs() {
+                axios.get('/user/logDetails', {}
+                ).then((response) => {
                     if (response.data.code < 0) {
                         alert(response.data.message);
                     } else {
@@ -271,81 +278,52 @@
                 }).catch((error) => {
                     alert(error);
                 })
-            }
+            },
+            getPaidType() {
+                axios.get('/user/getPaidType', {}).then((response) => {
+                    if (response.data.code < 0) {
+                        alert(response.data.message);
+                    } else {
+                        this.typeDataSet = response.data.result;
+                        let TypeChart = new G2.Chart({
+                            container: 'paidType',
+                            forceFit: true,
+                            height: 400,
+                            animate: false
+                        });
+                        TypeChart.source(this.typeDataSet);
+                        TypeChart.coord('theta', {
+                            radius: 0.75,
+                            innerRadius: 0.6
+                        });
+                        TypeChart.tooltip({
+                            showTitle: false,
+                            itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+                        });
+                        let interval = TypeChart.intervalStack().position('percent').color('item').label('percent', {
+                            formatter: function formatter(val, item) {
+                                return item.point.item + ': ' + val * 100 + '%';
+                            }
+                        }).tooltip('item*count', function (item, count) {
+                            count = count;
+                            return {
+                                name: item,
+                                value: count
+                            };
+                        }).style({
+                            lineWidth: 2,
+                            stroke: '#fff'
+                        });
+
+                        TypeChart.render();
+                        interval.setSelected(this.typeDataSet[0]);
+                    }
+                }).catch((error) => {
+                    alert(error);
+                })
+            },
 
         }
     });
-
-    // 基于准备好的dom，初始化echarts实例
-    var TypeChart = echarts.init(document.getElementById('amountData'));
-
-    // 指定图表的配置项和数据
-    var option = {
-        title: {
-            text: '金额统计',
-            left: 'center',
-            top: 20
-        },
-
-        tooltip : {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-
-        visualMap: {
-            show: false,
-            min: 80,
-            max: 600,
-            inRange: {
-                colorLightness: [0, 1]
-            }
-        },
-        series : [
-            {
-                name:'金额',
-                type:'pie',
-                radius : '55%',
-                center: ['50%', '50%'],
-                data:[
-                    {value:335, name:'创业启动资金'},
-                    {value:310, name:'慈善机构募捐'},
-                    {value:274, name:'个人慈善募捐'},
-                    {value:235, name:'待定1'},
-                    {value:400, name:'待定2'}
-                ].sort(function (a, b) { return a.value - b.value; }),
-                roseType: 'radius',
-                label: {
-                    normal: {
-                        textStyle: {
-                            color: 'rgb(0, 0, 0)'
-                        }
-                    }
-                },
-                labelLine: {
-                    normal: {
-                        lineStyle: {
-                            color: 'rgb(0, 0, 0)'
-                        },
-                        smooth: 0.2,
-                        length: 10,
-                        length2: 20
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        shadowBlur: 200,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                },
-                animationType: 'scale',
-                animationEasing: 'elasticOut',
-                animationDelay: function (idx) {
-                    return Math.random() * 200;
-                }
-            }
-        ]
-    };
-    // 使用刚指定的配置项和数据显示图表。
-    TypeChart.setOption(option);
 </script>
 </html>

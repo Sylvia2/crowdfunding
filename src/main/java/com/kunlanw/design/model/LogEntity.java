@@ -13,4 +13,5 @@ public class LogEntity {
     private int projectId;
     private long amount;
     private String date;
+    private int typeId;
 }

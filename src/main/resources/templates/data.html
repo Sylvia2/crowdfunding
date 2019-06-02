@@ -46,9 +46,9 @@
                 <el-row type="flex">
                     <el-col :span="4" justify="center">
                     </el-col>
-                    <el-col :span="12" justify="center">
+                    <el-col :span="14" justify="center">
                         <el-card shadow="hover">
-                            <b>众筹项目状态占比</b>
+                            <b>众筹项目状态分布</b>
                             <div id="mountNode" style="width:auto;height:auto;">
                             </div>
                         </el-card>
@@ -60,7 +60,7 @@
                 <el-row type="flex">
                     <el-col :span="4" justify="center">
                     </el-col>
-                    <el-col :span="12" justify="center">
+                    <el-col :span="14" justify="center">
                         <el-card shadow="hover">
                             <b>众筹项目类别占比</b>
                             <div id="typeNode" style="width:auto;height:auto;">
@@ -74,7 +74,7 @@
                 <el-row type="flex">
                     <el-col :span="4" justify="center">
                     </el-col>
-                    <el-col :span="12" justify="center">
+                    <el-col :span="14" justify="center">
                         <el-card shadow="hover">
                             <b>众筹项目增长图</b>
                             <div id="increaseProjectNode" style="width:auto;height:auto;">
@@ -84,6 +84,20 @@
                     <el-col :span="4" justify="center">
                     </el-col>
                 </el-row>
+                <!--<br/>-->
+                <!--<el-row type="flex">-->
+                    <!--<el-col :span="4" justify="center">-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="14" justify="center">-->
+                        <!--<el-card shadow="hover">-->
+                            <!--<b>平台经营情况</b>-->
+                            <!--<div id="ManageNode" style="width:auto;height:auto;">-->
+                            <!--</div>-->
+                        <!--</el-card>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="4" justify="center">-->
+                    <!--</el-col>-->
+                <!--</el-row>-->
             </el-main>
         </el-container>
     </el-container>
@@ -99,6 +113,7 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
 <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
 <script>
 
 
@@ -106,16 +121,17 @@
         el: "#app",
         data: function () {
             return {
-                allNum:200,
                 statusDataSet:null,
                 typeDataSet:null,
-                increaseDataSet:null
+                increaseDataSet:null,
+                manageDataSet:null
             }
         },
         created: function () {
             this.getStatus();
             this.getType();
             this.getIncrease();
+            // this.getManage();
         },
         methods: {
             handleOpen(key, keyPath) {
@@ -231,62 +247,75 @@
                     alert(error);
                 })
 
-            }
+            },
+            // getManage(){
+            //     axios.get('/project/getMangeView',{
+            //
+            //     }).then((response)=>{
+            //         this.manageDataSet=response.data.result;
+            //         let chart = new G2.Chart({
+            //             container: 'ManageNode',
+            //             forceFit: true,
+            //             height: 500,
+            //             padding: [100, 20, 30, 45] // 上右下左
+            //         });
+            //         chart.source(this.manageDataSet);
+            //         chart.tooltip({
+            //             follow: false,
+            //             crosshairs: 'y',
+            //             htmlContent: function htmlContent(title, items) {
+            //                 var alias = {
+            //                     amount: '当日累计交易额',
+            //                     register: '当日累计',
+            //                     bill: '当日累计成交量'
+            //                 };
+            //                 var html = '<div class="custom-tooltip">';
+            //                 for (var i = 0; i < items.length; i++) {
+            //                     var item = items[i];
+            //                     var color = item.color;
+            //                     var name = alias[item.name];
+            //                     var value = item.value;
+            //                     var domHead = '<div class="custom-tooltip-item" style="border-left-color:' + color + '">';
+            //                     var domName = '<div class="custom-tooltip-item-name">' + name + '</div>';
+            //                     var domValue = '<div class="custom-tooltip-item-value">' + value + '</div>';
+            //                     var domTail = '</div>';
+            //                     html += domHead + domName + domValue + domTail;
+            //                 }
+            //                 return html + '</div>';
+            //             }
+            //         });
+            //         chart.axis('date', {
+            //             label: {
+            //                 textStyle: {
+            //                     fill: '#aaaaaa'
+            //                 }
+            //             }
+            //         });
+            //         chart.axis('value', {
+            //             label: {
+            //                 textStyle: {
+            //                     fill: '#aaaaaa'
+            //                 },
+            //                 formatter: function formatter(text) {
+            //                     return text.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+            //                 }
+            //             }
+            //         });
+            //         chart.legend(false);
+            //         chart.line().position('date*value').color('type');
+            //         chart.render();
+            //         chart.showTooltip({
+            //             x: $("#ManageNode").width() - 20,
+            //             y: 100
+            //         });
+            //
+            //     }).catch((error)=>{
+            //         alert(error);
+            //     })
+            // }
+
         }
     });
-    let typeData = [{
-        item: '创业',
-        count: 40,
-        percent:0.4
-    }, {
-        item: '扶贫',
-        count: 21,
-        percent:0.21
-    }, {
-        item: '人道救援',
-        count: 17,
-        percent:0.17
-    }, {
-        item: '环境保护',
-        count: 13,
-        percent:0.13
-    }, {
-        item: '动物保护',
-        count: 9,
-        percent:0.09
-    }];
-    // let TypeChart = new G2.Chart({
-    //     container: 'typeNode',
-    //     forceFit: true,
-    //     height: 400,
-    //     animate: false
-    // });
-    // TypeChart.source(typeData);
-    // TypeChart.coord('theta', {
-    //     radius: 0.75,
-    //     innerRadius: 0.6
-    // });
-    // TypeChart.tooltip({
-    //     showTitle: false,
-    //     itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
-    // });
-    // let interval = TypeChart.intervalStack().position('percent').color('item').label('percent', {
-    //     formatter: function formatter(val, item) {
-    //         return item.point.item + ': ' + val*100+'%';
-    //     }
-    // }).tooltip('item*count', function(item, count) {
-    //     count = count ;
-    //     return {
-    //         name: item,
-    //         value: count
-    //     };
-    // }).style({
-    //     lineWidth: 2,
-    //     stroke: '#fff'
-    // });
-    //
-    // TypeChart.render();
-    // interval.setSelected(typeData[0]);
 
 
 </script>

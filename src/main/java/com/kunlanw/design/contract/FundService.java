@@ -132,7 +132,7 @@ public class FundService implements IFundService {
             project.setStatus(status);
             return project;
         } catch (Exception e) {
-            throw new Exception("获取项目实时金额失败");
+            throw new Exception("获取项目实时数据失败");
         }
     }
 

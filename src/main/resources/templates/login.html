@@ -11,7 +11,7 @@
 <div id="app" class="login">
     <el-card class="box-card">
         <div slot="header" class="clearfix">
-            <span>登录</span>
+            <span>基于区块链交易的众筹系统</span>
         </div>
         <div>
             <el-form :model="loginForm" label-width="80px">
@@ -20,7 +20,7 @@
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]">
                     <el-col :span="15">
-                        <el-input v-model="loginForm.userEmail" placeholder="请输入邮箱" ></el-input>
+                        <el-input v-model="loginForm.userEmail" placeholder="请输入邮箱"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item prop="password" label="密码" :rules="[
@@ -33,7 +33,7 @@
                 <el-form-item>
                     <el-col :span="15">
                         <el-button type="primary" @click="submitForm">登录</el-button>
-                        <el-button type="success"  @click="register">注册</el-button>
+                        <el-button type="success" @click="register">注册</el-button>
                     </el-col>
 
                 </el-form-item>
@@ -55,31 +55,31 @@
         el: "#app",
         data: function () {
             return {
-                loginForm:{
+                loginForm: {
                     userEmail: '',
                     password: ''
                 }
             }
         },
         methods: {
-            submitForm(){
+            submitForm() {
                 axios.post('/user/login', {
-                    email:this.loginForm.userEmail,
+                    email: this.loginForm.userEmail,
                     pwd: this.loginForm.password
                 })
                     .then(function (response) {
-                        if(response.data.code<0){
+                        if (response.data.code < 0) {
                             alert(response.data.message);
-                        }else{
-                            window.location.href="/index";
+                        } else {
+                            window.location.href = "/index";
                         }
                     })
                     .catch(function (error) {
                         alert(error)
                     });
             },
-            register(){
-                window.location.href="/register";
+            register() {
+                window.location.href = "/register";
             }
 
 

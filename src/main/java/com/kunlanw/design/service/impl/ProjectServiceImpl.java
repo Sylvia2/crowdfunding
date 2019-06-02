@@ -38,10 +38,10 @@ public class ProjectServiceImpl implements IProjectService {
     public ProjectEntity getByID(int id) {
         try {
             Project project = this.projectMapper.selectByPrimaryKey(id);
-            if(project==null){
+            if (project == null) {
                 return null;
             }
-            ProjectEntity projectEntity=this.domain2model(project);
+            ProjectEntity projectEntity = this.domain2model(project);
             return projectEntity;
         } catch (Exception e) {
             return null;
@@ -55,17 +55,17 @@ public class ProjectServiceImpl implements IProjectService {
      * @throws Exception
      */
     @Override
-    public boolean createProject(ProjectEdit entity,int userid) throws Exception {
-        boolean res=false;
+    public boolean createProject(ProjectEdit entity, int userid) throws Exception {
+        boolean res = false;
         try {
             //status：0待审核 1进行中 2成功 3失败
-            Project project=new Project();
+            Project project = new Project();
             project.setUserid(userid);
             project.setDeadline(entity.getDeadline());
             project.setProjectname(entity.getName());
             project.setDesc(entity.getDesc());
             project.setProjectamount(entity.getAmount());
-            project.setStatus((short)0);
+            project.setStatus((short) 0);
             project.setType(entity.getType());
             project.setWalletid(entity.getWalletAddress());
             project.setDatachangeLasttime(new Date());
@@ -74,10 +74,10 @@ public class ProjectServiceImpl implements IProjectService {
             this.projectMapper.insertSelective(project);
             //上链
             Wallet wallet = this.walletMapper.selectByPrimaryKey(entity.getWalletAddress());
-            res= this.fundService.createProject(entity.getAmount().toBigInteger(), wallet.getAddress());
+            res = this.fundService.createProject(entity.getAmount().toBigInteger(), wallet.getAddress());
         } catch (Exception e) {
 //            throw new Exception("创建项目失败");
-            res=false;
+            res = false;
         }
         return res;
     }
@@ -168,6 +168,7 @@ public class ProjectServiceImpl implements IProjectService {
 
     /**
      * 参与众筹，更新log表，与合约交互
+     *
      * @param entity
      * @return
      * @throws Exception
@@ -175,19 +176,28 @@ public class ProjectServiceImpl implements IProjectService {
     @Override
     public boolean fundProject(FundEntity entity) throws Exception {
         try {
-            Log log = new Log();
-            log.setAmount(entity.getAmount().longValue());
-            log.setProjectid(entity.getProjectId());
-            log.setUserid(entity.getUserID());
-            log.setDatachangeCreatetime(new Date());
-            log.setDatachangeLasttime(new Date());
-            log.setWalletid(entity.getFromID());
-            this.logMapper.insertSelective(log);
-            Wallet wallet=this.walletMapper.selectByPrimaryKey(entity.getFromID());
-            entity.setAddress_from(wallet.getAddress());
-            //与合约交互
-            boolean res = this.fundService.fund(entity.getAddress_to(),entity.getAddress_from(), entity.getKey(), entity.getAmount().toBigInteger());
-            return res;
+            ContractProject contractProject = this.fundService.getProjectOnContract(entity.getAddress_to());
+            Project project = this.projectMapper.selectByPrimaryKey(entity.getProjectId());
+            if (contractProject.getRealtimeAmount().longValue() < project.getProjectamount().longValue()) {
+                Log log = new Log();
+                log.setAmount(entity.getAmount().longValue());
+                log.setProjectid(entity.getProjectId());
+                log.setUserid(entity.getUserID());
+                log.setDatachangeCreatetime(new Date());
+                log.setDatachangeLasttime(new Date());
+                log.setWalletid(entity.getFromID());
+                this.logMapper.insertSelective(log);
+                Wallet wallet = this.walletMapper.selectByPrimaryKey(entity.getFromID());
+                entity.setAddress_from(wallet.getAddress());
+                //与合约交互
+                boolean res = this.fundService.fund(entity.getAddress_to(), entity.getAddress_from(), entity.getKey(), entity.getAmount().toBigInteger());
+                return res;
+            }
+            if (entity.getAmount().longValue() >= (project.getProjectamount().longValue() - contractProject.getRealtimeAmount().longValue())) {
+                project.setStatus((short) 2);
+                this.projectMapper.updateByPrimaryKey(project);
+            }
+            return false;
         } catch (Exception e) {
             throw new Exception("参与众筹失败" + e.getMessage());
         }
@@ -221,8 +231,8 @@ public class ProjectServiceImpl implements IProjectService {
             if (list == null || list.isEmpty()) {
                 return null;
             }
-            for(Project item:list){
-                ProjectEntity entity=this.domain2model(item);
+            for (Project item : list) {
+                ProjectEntity entity = this.domain2model(item);
                 res.add(entity);
             }
             return res;

@@ -1,6 +1,5 @@
 package com.kunlanw.design.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.kunlanw.design.contract.IFundService;
 import com.kunlanw.design.domain.Project;
 import com.kunlanw.design.model.*;
@@ -15,12 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.RequestWrapper;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Comparator;
 import java.util.List;
 
 import java.util.Map;
@@ -277,9 +274,9 @@ public class ProjectController {
         try {
             List<ProjectEntity> list = this.projectService.getAll();
             List<ViewStatus> res = new ArrayList<>();
-            if(list.size()>0){
-                for(int i=0;i<4;i++){
-                    res.add(this.getViewStatus(i,list));
+            if (list.size() > 0) {
+                for (int i = 0; i < 4; i++) {
+                    res.add(this.getViewStatus(i, list));
                 }
             }
             result.setResult(res);
@@ -290,26 +287,26 @@ public class ProjectController {
         return result;
     }
 
-    private ViewStatus  getViewStatus(int i,List<ProjectEntity> list){
+    private ViewStatus getViewStatus(int i, List<ProjectEntity> list) {
         int num = list.stream().filter(p -> p.getStatus() == i).collect(Collectors.toList()).size();
-        return new ViewStatus(this.getStatus(i),num);
+        return new ViewStatus(this.getStatus(i), num);
     }
 
 
-    private String getStatus(int i){
-        String status="";
-        switch (i){
+    private String getStatus(int i) {
+        String status = "";
+        switch (i) {
             case 0:
-                status="审核中";
+                status = "审核中";
                 break;
             case 1:
-                status="进行中";
+                status = "进行中";
                 break;
             case 2:
-                status="成功";
+                status = "成功";
                 break;
             case 3:
-                status="失败";
+                status = "失败";
                 break;
         }
 
@@ -335,8 +332,8 @@ public class ProjectController {
             List<ViewType> res = new ArrayList<>();
             if (list.size() > 0) {
                 for (int i = 1; i < 5; i++) {
-                    ViewType temp=this.getViewType(i,list);
-                    if(temp==null){
+                    ViewType temp = this.getViewType(i, list);
+                    if (temp == null) {
                         continue;
                     }
                     res.add(this.getViewType(i, list));
@@ -352,10 +349,10 @@ public class ProjectController {
 
     private ViewType getViewType(int i, List<ProjectEntity> list) {
         int num = list.stream().filter(p -> p.getType() == i).collect(Collectors.toList()).size();
-        if(num==0){
+        if (num == 0) {
             return null;
         }
-        return new ViewType(this.getType(i), num, this.getFormateDouble(num*1.0 / list.size()));
+        return new ViewType(this.getType(i), num, this.getFormateDouble(num * 1.0 / list.size()));
     }
 
     private String getType(int i) {
@@ -386,22 +383,22 @@ public class ProjectController {
     }
 
 
-    @RequestMapping(value = "/getIncreaseProjects",method = RequestMethod.GET)
+    @RequestMapping(value = "/getIncreaseProjects", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseResult getIncreaseProjects(){
-        ResponseResult result=new ResponseResult();
+    public ResponseResult getIncreaseProjects() {
+        ResponseResult result = new ResponseResult();
         result.setCode(0);
-        try{
-            List<ProjectEntity> list=this.projectService.getAll();
-            if(list.size()>0){
-                List<ViewIncrease> res=new ArrayList<>();
-                Map<String,List<ProjectEntity>> temp=list.stream().collect(Collectors.groupingBy(ProjectEntity::getDataCreateTime));
-                for (String  key : temp.keySet()) {
-                    res.add(new ViewIncrease(key.substring(5),temp.get(key).size()));
+        try {
+            List<ProjectEntity> list = this.projectService.getAll();
+            if (list.size() > 0) {
+                List<ViewIncrease> res = new ArrayList<>();
+                Map<String, List<ProjectEntity>> temp = list.stream().collect(Collectors.groupingBy(ProjectEntity::getDataCreateTime));
+                for (String key : temp.keySet()) {
+                    res.add(new ViewIncrease(key.substring(5), temp.get(key).size()));
                 }
-                result.setResult(res);
+                result.setResult(res.stream().sorted(Comparator.comparing(ViewIncrease::getDay)));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             result.setCode(-1);
             result.setMessage(e.getMessage());
         }

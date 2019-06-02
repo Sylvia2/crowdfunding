@@ -4,6 +4,7 @@ import com.kunlanw.design.domain.User;
 import com.kunlanw.design.model.LogEntity;
 import com.kunlanw.design.model.LoginEntity;
 import com.kunlanw.design.model.UserEntity;
+import com.kunlanw.design.model.ViewType;
 import com.kunlanw.design.service.ILoggerService;
 import com.kunlanw.design.service.IUserService;
 import com.kunlanw.design.until.Constant;
@@ -133,6 +134,23 @@ public class UserController {
         try{
             int userid=(Integer)session.getAttribute(Constant.User_Session);
             List<LogEntity> res=this.loggerService.getLogsByUserid(userid);
+            result.setResult(res);
+        }catch (Exception e){
+            result.setCode(-1);
+            result.setMessage(e.getMessage());
+        }
+        return  result;
+    }
+
+
+    @RequestMapping(value = "/getPaidType",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult getPaidType(HttpSession session){
+        ResponseResult result=new ResponseResult();
+        result.setCode(0);
+        try{
+            int userid=(Integer)session.getAttribute(Constant.User_Session);
+            List<ViewType> res=this.loggerService.getPaidType(userid);
             result.setResult(res);
         }catch (Exception e){
             result.setCode(-1);
